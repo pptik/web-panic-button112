@@ -27,7 +27,7 @@ jobs:
           source: "."
           target: "/home/pptik-wbs/frontend/web-panic-button112"
 
-      - name: 🐳 Clean up old images
+      - name: 🧹 Clean up old images
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -35,7 +35,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker rmi $(sudo docker images -q web-panic-button112-web) || true
+            sudo docker rmi $(docker images -f "dangling=true" -q) || true
+
+            sudo docker container prune -f
 
       - name: 🐳 Build Docker compose
         uses: appleboy/ssh-action@master
