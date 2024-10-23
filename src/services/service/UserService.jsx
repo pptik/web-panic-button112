@@ -26,13 +26,8 @@ class UserService {
     return res;
   }
 
-  static async signup(data) {
-    const res = await userApi.post(SIGNUP, data);
-    return res;
-  }
-
   static async register(data) {
-    const res = await userApi.post(REGISTER, data, { headers: AuthHeaders() });
+    const res = await userApi.post(REGISTER, data);
     return res;
   }
 

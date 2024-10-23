@@ -1,8 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import { publicPages } from "../pages";
 // import RequireAuth from "./utils/requireAuth";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: publicPages.loginPage,
@@ -13,6 +13,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
+    element: publicPages.registerPage,
+  },
+  {
+    path: "/register-opd",
     element: publicPages.registerPage,
   },
   {
