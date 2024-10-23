@@ -1,0 +1,39 @@
+name: 🚀 CI / CD Actions For React Apps Into Server
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🏁 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 📂 Copy file into server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "."
+          target: "/home/pptik-wbs/frontend/web-panic-button112"
+
+      - name: 🐳 Build Docker compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/pptik-wbs/frontend/web-panic-button112
+            sudo docker-compose up -d --build
