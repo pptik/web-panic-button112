@@ -35,7 +35,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker rmi $(docker images -f "dangling=true" -q) || true
+            dangling_images=$(sudo docker images -f "dangling=true" -q)
+            if [ -n "$dangling_images" ]; then
+              sudo docker rmi $dangling_images || true
+            fi
 
             sudo docker container prune -f
 
