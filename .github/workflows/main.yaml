@@ -35,7 +35,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker image prune -af
+            sudo docker rmi $(sudo docker images -q web-panic-button112-web) || true
 
       - name: 🐳 Build Docker compose
         uses: appleboy/ssh-action@master
