@@ -4,8 +4,7 @@ const { USER_URL, API_URL } = URL;
 
 const API_ENDPOINT = {
   LOGIN: `${USER_URL}users/login`,
-  SIGNUP: `${USER_URL}users/register`,
-  REGISTER: `${USER_URL}users/add`,
+  REGISTER: `${USER_URL}users/register`,
   ACTIVATE_ACCOUNT: `${USER_URL}users/activate`,
   FORGOT_PASSWORD: `${USER_URL}users/forgot-password`,
   UPDATE_PASSWORD: `${USER_URL}users/edit-password`,

@@ -74,11 +74,11 @@ export default class LoginPage extends Component {
           </Typography>
           <Button variant="contained">Masuk</Button>
           <Typography textAlign={"center"} marginTop={1} color="black">
-            <NavLink className="text-sm font-bold" to="/register">
+            <NavLink className="text-sm font-bold" to="/register-opd">
               Buat Akun <span className="font-thin">Di sini!</span>
             </NavLink>
           </Typography>
-          <hr className="border-[1px] border-main"/>
+          <hr className="border-[1px] border-main" />
           <Typography textAlign={"center"} color="black">
             <NavLink className="text-sm font-bold" to="/activation-account">
               Aktivasi Akun <span className="font-thin">Di sini!</span>
