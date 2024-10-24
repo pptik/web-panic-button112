@@ -76,7 +76,7 @@ const ChangePassword = ({ isOpen, onClose, data }) => {
   return (
     <Dialog
       open={isOpen}
-      size="sm"
+      size="xs"
       animate={{
         mount: { scale: 1, y: 0 },
         unmount: { scale: 0.9, y: -100 },

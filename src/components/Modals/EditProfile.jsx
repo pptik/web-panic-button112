@@ -21,11 +21,6 @@ const EditProfile = ({ isOpen, onClose, data = {} }) => {
   const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleImageSelect = (e) => {
-    const file = e.target.files?.[0];
-    setImage(file);
-  };
-
   const handleClose = () => {
     onClose();
   };
@@ -55,9 +50,7 @@ const EditProfile = ({ isOpen, onClose, data = {} }) => {
       const response = await UserService.updateProfile(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(
-        response.data.message
-      );
+      AlertComponent.SuccessResponse(response.data.message);
       setInterval(() => {
         window.location.reload();
       }, 2000);
@@ -76,7 +69,7 @@ const EditProfile = ({ isOpen, onClose, data = {} }) => {
   return (
     <Dialog
       open={isOpen}
-      size="sm"
+      size="xs"
       animate={{
         mount: { scale: 1, y: 0 },
         unmount: { scale: 0.9, y: -100 },

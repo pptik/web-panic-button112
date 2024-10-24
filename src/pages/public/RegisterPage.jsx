@@ -78,7 +78,6 @@ const RegisterPage = () => {
       guidAplication,
       role,
     };
-    console.log(data);
     setLoading(true);
     try {
       const res = await UserService.register(data);

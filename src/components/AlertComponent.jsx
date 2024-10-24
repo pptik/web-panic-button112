@@ -1,7 +1,16 @@
 import Swal from "sweetalert2";
 
 class AlertComponent {
-  showAlert({ icon, title, message, confirmButtonText = "Tutup", confirmButtonColor = "red", showCancelButton = false, cancelButtonText = "Batal", cancelButtonColor = "grey" }) {
+  showAlert({
+    icon,
+    title,
+    message,
+    confirmButtonText = "Tutup",
+    confirmButtonColor = "red",
+    showCancelButton = false,
+    cancelButtonText = "Batal",
+    cancelButtonColor = "grey",
+  }) {
     return Swal.fire({
       icon: icon,
       title: title,
