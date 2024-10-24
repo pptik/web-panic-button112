@@ -8,13 +8,21 @@ import {
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
+import { GuidApp } from "../../helpers/GuidApplication";
+import UserService from "../../services/service/UserService";
+import User from "../../localStorages/User";
+import AlertComponent from "../../components/AlertComponent";
 
 export default class LoginPage extends Component {
   constructor() {
     super();
     this.state = {
       showPassword: false,
+      email: "",
+      password: "",
+      loading: false,
+      referrer: false,
     };
   }
 
@@ -22,7 +30,44 @@ export default class LoginPage extends Component {
     this.setState({ showPassword: !this.state.showPassword });
   };
 
+  validate = () => {
+    if (!this.state.email) {
+      AlertComponent.Error("Email harus diisi!");
+    } else if (!this.state.password) {
+      AlertComponent.Error("Password harus diisi!");
+    } else {
+      this.onLogin();
+    }
+  };
+
+  onLogin = async () => {
+    const data = {
+      email: this.state.email,
+      password: this.state.password,
+      guidAplication: GuidApp,
+    };
+    this.setState({ loading: true });
+    try {
+      const res = await UserService.login(data);
+      if (res.data.success) {
+        User.SaveAppToken(res.data.data.appToken);
+        User.SaveUserToken(res.data.data.userToken);
+        this.setState({ referrer: true });
+        AlertComponent.SuccessResponse(res.data.message);
+      } else {
+        AlertComponent.Error(res.data.message);
+      }
+    } catch (error) {
+      AlertComponent.Error(
+        error.response?.data?.message || "An error occurred"
+      );
+    } finally {
+      this.setState({ loading: false });
+    }
+  };
+
   render() {
+    if (this.state.referrer) return <Navigate to="/dashboard" />;
     return (
       <div className="flex flex-col gap-3 justify-center items-center min-h-screen">
         <img src={logo} alt="Panic Button 112" />
@@ -38,6 +83,9 @@ export default class LoginPage extends Component {
             required
             className="w-full"
             size="small"
+            name="email"
+            value={this.state.email}
+            onChange={(e) => this.setState({ email: e.target.value })}
           />
           <TextField
             id="outlined-password"
@@ -46,6 +94,9 @@ export default class LoginPage extends Component {
             required
             className="w-full"
             size="small"
+            name="password"
+            value={this.state.password}
+            onChange={(e) => this.setState({ password: e.target.value })}
             type={this.state.showPassword ? "text" : "password"}
             InputProps={{
               endAdornment: (
@@ -72,7 +123,9 @@ export default class LoginPage extends Component {
           <Typography textAlign={"right"} marginTop={1} color="error">
             <NavLink to="/forgot-password">*Lupa Password</NavLink>
           </Typography>
-          <Button variant="contained">Masuk</Button>
+          <Button variant="contained" onClick={this.validate}>
+            {this.state.loading ? "Loading..." : "Masuk"}
+          </Button>
           <Typography textAlign={"center"} marginTop={1} color="black">
             <NavLink className="text-sm font-bold" to="/register-opd">
               Buat Akun <span className="font-thin">Di sini!</span>
