@@ -35,6 +35,26 @@ const router = createHashRouter([
         path: "/profile",
         element: privatePages.profilepage,
       },
+      {
+        path: "/announcement",
+        element: privatePages.announcemnetpage,
+      },
+      {
+        path: "/case",
+        element: privatePages.casepage,
+      },
+      {
+        path: "/device",
+        element: privatePages.devicepage,
+      },
+      {
+        path: "/opd-list",
+        element: privatePages.opdpage,
+      },
+      {
+        path: "/user-management",
+        element: privatePages.userspage,
+      },
     ],
   },
 ]);

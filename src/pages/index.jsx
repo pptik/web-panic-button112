@@ -1,5 +1,10 @@
+import AnnouncementPage from "./private/AnnouncementPage";
+import CasePage from "./private/CasePage";
 import DashboardPage from "./private/DashboardPage";
+import DevicePage from "./private/DevicePage";
+import OPDPage from "./private/OPDPage";
 import ProfilePage from "./private/ProfilePage";
+import UsersPage from "./private/UsersPage";
 import ActivationAccountPage from "./public/ActivationAccountPage";
 import ForgotPasswordPage from "./public/ForgotPasswordPage";
 import LoginPage from "./public/LoginPage";
@@ -14,5 +19,10 @@ export const publicPages = {
 
 export const privatePages = {
   dashboard: <DashboardPage />,
-  profilepage: <ProfilePage />
+  profilepage: <ProfilePage />,
+  casepage: <CasePage />,
+  devicepage: <DevicePage />,
+  userspage: <UsersPage />,
+  opdpage: <OPDPage />,
+  announcemnetpage: <AnnouncementPage />,
 };
