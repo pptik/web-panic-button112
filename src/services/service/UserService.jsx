@@ -1,4 +1,4 @@
-import { AuthHeaders } from "../../helpers/auth_header";
+import { AuthHeaders } from "../../helpers/AuthHeaders";
 import API_ENDPOINT from "../global";
 import { userApi } from "../global/config";
 
@@ -18,11 +18,6 @@ const {
 class UserService {
   static async login(data) {
     const res = await userApi.post(LOGIN, data);
-    return res;
-  }
-
-  static async loginVote(data) {
-    const res = await userApi.post(VOTE_LOGIN, data);
     return res;
   }
 

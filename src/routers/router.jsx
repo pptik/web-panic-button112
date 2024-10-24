@@ -1,6 +1,6 @@
 import { createHashRouter } from "react-router-dom";
-import { publicPages } from "../pages";
-// import RequireAuth from "./utils/requireAuth";
+import { privatePages, publicPages } from "../pages";
+import RequireAuth from "./utils/requireAuth";
 
 const router = createHashRouter([
   {
@@ -23,56 +23,20 @@ const router = createHashRouter([
     path: "/activation-account",
     element: publicPages.activationAccount,
   },
-  // {
-  //   path: "/",
-  //   element: <RequireAuth redirectPath={"/"} />,
-  //   children: [
-  //     {
-  //       path: "/dashboard",
-  //       element: pages.dashboard,
-  //     },
-  //     {
-  //       path: "/pengguna",
-  //       element: pages.userPage,
-  //     },
-  //     {
-  //       path: "/perangkat",
-  //       element: pages.devicePage,
-  //     },
-  //     {
-  //       path: "/atur-jadwal",
-  //       element: pages.schedulePage,
-  //     },
-  //     {
-  //       path: "/kartu-rfid",
-  //       element: pages.rfidPage,
-  //     },
-  //     {
-  //       path: "/profil",
-  //       element: pages.profilPage,
-  //     },
-  //     {
-  //       path: "/tambah-kartu",
-  //       element: pages.addRfid,
-  //     },
-  //     {
-  //       path: "/tambah-detail-kartu",
-  //       element: pages.addDetailRfid,
-  //     },
-  //     {
-  //       path: "/unit",
-  //       element: pages.unitPage,
-  //     },
-  //     {
-  //       path: "/jadwal-lembur",
-  //       element: pages.lemburPage,
-  //     },
-  //     {
-  //       path: "/detail-lembur",
-  //       element: pages.detailLembur,
-  //     },
-  //   ],
-  // },
+  {
+    path: "/",
+    element: <RequireAuth redirectPath={"/"} />,
+    children: [
+      {
+        path: "/dashboard",
+        element: privatePages.dashboard,
+      },
+      {
+        path: "/profile",
+        element: privatePages.profilepage,
+      },
+    ],
+  },
 ]);
 
 export default router;

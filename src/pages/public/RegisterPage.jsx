@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { Navigate, useLocation } from "react-router-dom"; // Import useLocation
 import logo from "../../assets/panic-button.svg";
 import {
   Button,
@@ -15,6 +15,8 @@ import {
 import { NavLink } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { GuidApp } from "../../helpers/GuidApplication";
+import AlertComponent from "../../components/AlertComponent";
+import UserService from "../../services/service/UserService";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,15 +27,11 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
+  const [companyGuid, setCompanyGuid] = useState("");
   const [guidAplication] = useState(GuidApp);
   const [companies, setCompanies] = useState([]);
   const [refferrer, setRefferrer] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    getCompany();
-  }, []);
 
   const getCompany = async () => {
     try {
@@ -54,11 +52,63 @@ const RegisterPage = () => {
     setShowPassword((prev) => !prev);
   };
 
+  const validasi = () => {
+    if (!companyGuid) {
+      AlertComponent.Warning("Instansi harus dipilih!");
+    } else if (!name) {
+      AlertComponent.Warning("Nama harus diisi!");
+    } else if (!phoneNumber) {
+      AlertComponent.Warning("Telepon harus diisi!");
+    } else if (!email) {
+      AlertComponent.Warning("Email harus diisi!");
+    } else if (!password) {
+      AlertComponent.Warning("Password harus diisi!");
+    } else {
+      register();
+    }
+  };
+
+  const register = async () => {
+    const data = {
+      name,
+      email,
+      password,
+      companyGuid,
+      phoneNumber,
+      guidAplication,
+      role,
+    };
+    console.log(data);
+    setLoading(true);
+    try {
+      const res = await UserService.register(data);
+      if (res.data.success) {
+        AlertComponent.SuccessResponse(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+        setRefferrer(true);
+      } else {
+        AlertComponent.Warning(res.data.message);
+      }
+    } catch (error) {
+      AlertComponent.Error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setRole(isOpd ? ADMIN_ROLE : SUPER_ADMIN_ROLE);
   }, [isOpd]);
 
-  return (
+  useEffect(() => {
+    getCompany();
+  }, []);
+
+  return refferrer ? (
+    <Navigate to={"/activation-account"} />
+  ) : (
     <div className="flex flex-col gap-3 justify-center items-center min-h-screen">
       <img src={logo} alt="Panic Button 112" />
       <h1 className="text-3xl text-main font-bold tracking-wider">
@@ -73,45 +123,58 @@ const RegisterPage = () => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            label="Age"
+            label="Asal Instansi"
             size="small"
+            name="company"
+            value={companyGuid}
+            onChange={(e) => setCompanyGuid(e.target.value)}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {companies?.map((com) => (
+              <MenuItem key={com.guid} value={com.guid}>
+                {com.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <TextField
-          id="outlined-basic"
           label="Nama Lengkap"
           variant="outlined"
           required
           className="w-full"
           size="small"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <TextField
-          id="outlined-basic"
           label="No. Telepon"
           variant="outlined"
           required
           className="w-full"
           size="small"
+          name="phoneNumber"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <TextField
-          id="outlined-basic"
           label="Email"
           variant="outlined"
           required
           className="w-full"
           size="small"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          id="outlined-password"
           label="Password"
           variant="outlined"
           required
           className="w-full"
           size="small"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -129,7 +192,9 @@ const RegisterPage = () => {
             ),
           }}
         />
-        <Button variant="contained">Masuk</Button>
+        <Button variant="contained" onClick={validasi}>
+          {loading ? "Loading..." : "Daftar"}
+        </Button>
         <Typography textAlign={"center"} marginTop={1} color="black">
           <NavLink className="text-sm font-bold" to="/">
             Masuk <span className="font-thin">Di sini!</span>

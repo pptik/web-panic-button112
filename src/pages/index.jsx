@@ -1,3 +1,5 @@
+import DashboardPage from "./private/DashboardPage";
+import ProfilePage from "./private/ProfilePage";
 import ActivationAccountPage from "./public/ActivationAccountPage";
 import ForgotPasswordPage from "./public/ForgotPasswordPage";
 import LoginPage from "./public/LoginPage";
@@ -8,4 +10,9 @@ export const publicPages = {
   registerPage: <RegisterPage />,
   forgotPassword: <ForgotPasswordPage />,
   activationAccount: <ActivationAccountPage />,
+};
+
+export const privatePages = {
+  dashboard: <DashboardPage />,
+  profilepage: <ProfilePage />
 };
