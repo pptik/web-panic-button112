@@ -32,9 +32,9 @@ export default class OPDPage extends Component {
     return (
       <Layout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-sm">Dashboard / List OPD</h1>
+          <h1 className="text-sm">Dashboard / Daftar OPD</h1>
           <h1 className="text-xl text-main font-bold tracking-wide">
-            List OPD Terdaftar
+            OPD Terdaftar
           </h1>
           <div className="bg-white p-3">
             <div className="mt-3 flex gap-3">

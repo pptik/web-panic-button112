@@ -37,7 +37,7 @@ const Sidebar = () => {
       path: "/announcement",
     },
     {
-      name: "Kasus Kejadian",
+      name: "Riwayat Kejadian",
       icon: TbDeviceAirpodsCase,
       path: "/case",
     },

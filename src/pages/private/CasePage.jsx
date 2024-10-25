@@ -31,9 +31,9 @@ export default class CasePage extends Component {
     return (
       <Layout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-sm">Dashboard / Kasus Kejadian</h1>
+          <h1 className="text-sm">Dashboard / Riwayat Kejadian</h1>
           <h1 className="text-xl text-main font-bold tracking-wide">
-            Kasus Kejadian
+            Riwayat Kejadian
           </h1>
           <div className="bg-white p-3">
             <div className="mt-3 flex gap-3">

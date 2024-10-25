@@ -32,7 +32,7 @@ export default class DevicePage extends Component {
     return (
       <Layout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-sm">Dashboard / Manajemen Perangkat</h1>
+          <h1 className="text-sm">Dashboard / Perangkat</h1>
           <h1 className="text-xl text-main font-bold tracking-wide">
             Perangkat Terdaftar
           </h1>

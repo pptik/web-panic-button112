@@ -4,7 +4,7 @@ import { appApi } from "../global/config";
 
 const {
   ADD_CASE,
-  GET_CASE,
+  GET_CASE_DONE,
   GET_CASE_BY_ID,
   UPDATE_CASE,
   DELETE_CASE,
@@ -17,8 +17,8 @@ class CaseService {
     return res;
   }
 
-  static async GetCase() {
-    const res = await appApi.get(GET_CASE, { headers: AppHeaders() });
+  static async GetCaseDone() {
+    const res = await appApi.get(GET_CASE_DONE, { headers: AppHeaders() });
     return res;
   }
 
