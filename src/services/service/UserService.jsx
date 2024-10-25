@@ -13,6 +13,8 @@ const {
   ACTIVATE_ACCOUNT,
   GET_COMPANIES,
   GET_USERS,
+  DELETE_USERS,
+  UPDATE_USERS,
 } = API_ENDPOINT;
 
 class UserService {
@@ -72,6 +74,20 @@ class UserService {
 
   static async getUsersByModule() {
     const res = await userApi.get(GET_USERS, {
+      headers: AuthHeaders(),
+    });
+    return res;
+  }
+
+  static async updateUser(guid) {
+    const res = await appApi.put(UPDATE_USERS(guid), data, {
+      headers: AuthHeaders(),
+    });
+    return res;
+  }
+
+  static async deleteUser(guid) {
+    const res = await appApi.delete(DELETE_USERS(guid), {
       headers: AuthHeaders(),
     });
     return res;
