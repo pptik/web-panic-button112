@@ -49,7 +49,7 @@ const CaseTable = ({ searchQuery, onEdit }) => {
 
   const getAllData = async () => {
     try {
-      const response = await CaseService.GetCase();
+      const response = await CaseService.GetCaseDone();
       console.log(response.data.data);
       if (response.data.status) {
         const fetchedData = response.data.data.map((data, index) => ({
