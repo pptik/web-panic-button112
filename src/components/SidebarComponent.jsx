@@ -18,12 +18,19 @@ import User from "../localStorages/User";
 import notify from "../assets/notify.svg";
 import { TbDeviceAirpodsCase, TbDeviceWatch } from "react-icons/tb";
 import { FaFireAlt, FaRegUser } from "react-icons/fa";
+import { GetRole } from "../helpers/AuthHeaders";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [min, setMin] = useState(true);
   const [open, setOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [role, setRole] = useState(""); // State untuk menyimpan role pengguna
+
+  useEffect(() => {
+    const userRole = GetRole(); // Ambil role pengguna dari fungsi GetRole atau konteks autentikasi
+    setRole(userRole);
+  }, []);
 
   const itemSidebar = [
     {
@@ -62,6 +69,31 @@ const Sidebar = () => {
       path: "/profile",
     },
   ];
+
+  const adminSidebar = [
+    {
+      name: "Dashboard",
+      icon: RiDashboardFill,
+      path: "/dashboard",
+    },
+    {
+      name: "Kasus Kejadian",
+      icon: RiHistoryFill,
+      path: "/incident",
+    },
+    {
+      name: "Perangkat",
+      icon: TbDeviceWatch,
+      path: "/device",
+    },
+    {
+      name: "Profile",
+      icon: FaRegUser,
+      path: "/profile",
+    },
+  ];
+
+  const sidebarItems = role === "super_admin" ? itemSidebar : adminSidebar;
 
   const handleMin = () => setMin(!min);
   const handleOpen = () => setOpen(!open);
@@ -109,13 +141,12 @@ const Sidebar = () => {
                 className={`${
                   min ? "text-sm text-blue tracking-widest" : "hidden"
                 }`}
-              >
-              </h2>
+              ></h2>
             </div>
           </div>
           <hr className="border-main mt-2" />
           <List className="my-5">
-            {itemSidebar.map((item, index) => (
+            {sidebarItems.map((item, index) => (
               <NavLink
                 key={index}
                 to={item.path}

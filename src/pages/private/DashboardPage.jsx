@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/LayoutComponent";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
+import "@ansur/leaflet-pulse-icon";
 import deviceMarker from "../../assets/marker-device.svg";
 import emergencyMarker from "../../assets/marker112.svg";
 import DeviceService from "../../services/service/DeviceService";
@@ -33,10 +34,17 @@ const emergencyIcon = L.icon({
 });
 
 const defaultIcon = L.icon({
+  html: `<div class="animate-blink></div>`,
   iconUrl: defaultMarker,
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [-3, -38],
+});
+
+// Create a pulsing icon for WebSocket data markers
+const pulsingIcon = L.icon.pulse({
+  iconSize: [20, 20],
+  color: "red",
 });
 
 const DashboardPage = () => {
@@ -89,11 +97,9 @@ const DashboardPage = () => {
     socketRef.current = io("wss://api-panic-button112.lskk.co.id/");
 
     socketRef.current.on("connect", () => {
-      console.log("Connected to WebSocket", socketRef.current.id);
     });
 
     socketRef.current.on(`case-112#${idCompany}`, (data = IPayloadRMQ) => {
-      console.log("Received data:", data);
       setCaseData((prevData) => [...prevData, data]); // Append new data
     });
   };
@@ -193,29 +199,22 @@ const DashboardPage = () => {
                 <Marker
                   key={caseData.id}
                   position={[caseData.latitude, caseData.longitude]}
-                  icon={deviceIcon}
+                  icon={pulsingIcon}
+                  className="animate-blink"
                 >
                   <Popup>
-                    <div className="flex flex-col gap-2">
+                    <div className={`flex flex-col gap-2`}>
                       <h2 className="text-sm text-main font-bold tracking-wide">
                         Laporan Masuk
                       </h2>
                       <img
-                        src={cas.imageUrl ? cas.imageUrl : laporan}
+                        src={caseData.imageUrl ? caseData.imageUrl : laporan}
                         alt="laporan masuk 112"
                       />
                       <div className="flex flex-col gap-1">
                         <div>
-                          <span className="font-semibold">Nama : </span>
-                          {cas.sender}
-                        </div>
-                        <div>
                           <span className="font-semibold">Kondisi : </span>
-                          {cas.description}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Lokasi : </span>
-                          {cas.address}
+                          {caseData.description}
                         </div>
                       </div>
                       <Button className="bg-main" onClick={checkCase}>

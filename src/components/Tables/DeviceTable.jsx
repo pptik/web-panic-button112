@@ -23,7 +23,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
           <Button
             size="sm"
             className="bg-main mx-1"
-            onClick={() => handleDelete(params.row.guid)}
+            onClick={() => handleDelete(params.id)}
           >
             Hapus
           </Button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, IconButton, Spinner, Tooltip } from "@material-tailwind/react";
+import {  IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
@@ -35,13 +35,12 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
             </IconButton>
           </Tooltip>
           <Tooltip content="Laporkan">
-            <IconButton size="sm" className="bg-main mx-1">
+            <IconButton
+              size="sm"
+              className="bg-main mx-1"
+              onClick={() => onEdit(params.id)}
+            >
               <FiSend />
-            </IconButton>
-          </Tooltip>
-          <Tooltip content="Detail">
-            <IconButton size="sm" className="bg-yellow mx-1">
-              <MdInfo />
             </IconButton>
           </Tooltip>
         </>
@@ -91,7 +90,7 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
           }
         } catch (error) {
           console.log(error);
-          
+
           AlertComponent.Error(error.response.data.message);
         } finally {
           setLoading(false);

@@ -56,9 +56,13 @@ class CaseService {
   }
 
   static async TurnOffCase(guid) {
-    const res = await appApi.put(TURN_OFF_CASE(guid), {
-      headers: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJndWlkIjoiVVNFUi1iMTRkMGNiZC0xOTA4LTRjNjItOGZmMC1kZDNlMzQwYWU5ZjUtMjAyNCIsIm5hbWUiOiJNLiBBamkgUGVyZGFuYWFhIiwiZ3VpZEFwbGljYXRpb24iOiJQUk9KRUNULWJiN2NjOWNiLWM5NjEtNDEyMS1iZGNiLTNjNmVjMjE0NGU1NS0yMDI0Iiwicm9sZSI6InN1cGVyX2FkbWluIiwiY29tcGFueUd1aWQiOiJDT01QQU5ZLWExNDYxZDZlLTYzNDEtNGQzMS1hNzg2LTVmNDA2Y2M0YjlmNS0yMDI0IiwiaWF0IjoxNzMwMDgyMjIyLCJleHAiOjE3MzA2ODcwMjJ9.a-oXJ8tErXK2L6lMW1r7-fkalEjaS-eG_RX4M7nE0j0`,
-    });
+    const res = await appApi.put(
+      TURN_OFF_CASE(guid),
+      {},
+      {
+        headers: AppHeaders(),
+      }
+    );
     return res;
   }
 }
