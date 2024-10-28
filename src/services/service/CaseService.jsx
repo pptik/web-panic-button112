@@ -6,6 +6,7 @@ const {
   ADD_CASE,
   GET_CASE_DONE,
   GET_CASE,
+  GET_ALL_CASE,
   GET_CASE_BY_ID,
   UPDATE_CASE,
   DELETE_CASE,
@@ -25,6 +26,11 @@ class CaseService {
 
   static async GetCase() {
     const res = await appApi.get(GET_CASE, { headers: AppHeaders() });
+    return res;
+  }
+
+  static async GetAllCase() {
+    const res = await appApi.get(GET_ALL_CASE, { headers: AppHeaders() });
     return res;
   }
 
@@ -50,9 +56,13 @@ class CaseService {
   }
 
   static async TurnOffCase(guid) {
-    const res = await appApi.put(TURN_OFF_CASE(guid), {
-      headers: AppHeaders(),
-    });
+    const res = await appApi.put(
+      TURN_OFF_CASE(guid),
+      {},
+      {
+        headers: AppHeaders(),
+      }
+    );
     return res;
   }
 }

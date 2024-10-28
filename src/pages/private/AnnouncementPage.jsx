@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Layout from "../../components/LayoutComponent";
 import { Input } from "@material-tailwind/react";
 import AnnouncementTable from "../../components/Tables/AnnouncementTable";
+import ReportToOpd from "../../components/Modals/ReportToOpd";
 
 export default class AnnouncementPage extends Component {
   constructor() {
@@ -10,7 +11,7 @@ export default class AnnouncementPage extends Component {
       show: false,
       showAdd: false,
       searchQuery: "",
-      selectedDevice: null,
+      selected: null,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -19,8 +20,9 @@ export default class AnnouncementPage extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleOpen(device) {
-    this.setState({ show: !this.state.show, selectedDevice: device });
+  handleOpen(data) {
+    console.log(data);
+    this.setState({ show: !this.state.show, selected: data });
   }
 
   handleAddOpen() {
@@ -31,9 +33,9 @@ export default class AnnouncementPage extends Component {
     return (
       <Layout>
         <div className="flex flex-col gap-2">
-          <h1 className="text-sm">Dashboard / Pemberitahuan</h1>
+          <h1 className="text-sm">Dashboard / Kasus Kejadian</h1>
           <h1 className="text-xl text-main font-bold tracking-wide">
-            Pemberitahuan
+            Kasus Kejadian
           </h1>
           <div className="bg-white p-3">
             <div className="mt-3 flex gap-3">
@@ -51,6 +53,13 @@ export default class AnnouncementPage extends Component {
             />
           </div>
         </div>
+        {this.state.show && (
+          <ReportToOpd
+            isOpen={this.state.show}
+            onClose={() => this.setState({ show: false })}
+            data={this.state.selected}
+          />
+        )}
       </Layout>
     );
   }

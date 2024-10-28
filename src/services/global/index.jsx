@@ -29,10 +29,12 @@ const API_ENDPOINT = {
   ADD_CASE: `${API_URL}case`,
   GET_CASE_DONE: `${API_URL}case?status=Selesai`,
   GET_CASE: `${API_URL}case?status=Sedang Terjadi`,
+  GET_ALL_CASE: `${API_URL}case`,
   GET_CASE_BY_ID: (guid) => `${API_URL}case/${guid}`,
   UPDATE_CASE: (guid) => `${API_URL}case/${guid}`,
   DELETE_CASE: (guid) => `${API_URL}case/${guid}`,
   TURN_OFF_CASE: (guid) => `${API_URL}case/turn-off-actuator/${guid}`,
+  ADD_TRANSACTION: (guid) => `${API_URL}case-trx/${guid}`,
 };
 
 export default API_ENDPOINT;

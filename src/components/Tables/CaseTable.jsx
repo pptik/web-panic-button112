@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Spinner } from "@material-tailwind/react";
+import { Button, IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
+import { MdDelete, MdInfo } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 const CaseTable = ({ searchQuery, onEdit }) => {
   const [cases, setCases] = useState([]);
@@ -21,27 +23,29 @@ const CaseTable = ({ searchQuery, onEdit }) => {
       width: 260,
       renderCell: (params) => (
         <>
-          <Button
-            size="sm"
-            className="bg-main mx-1"
-            onClick={() => handleDelete(params.row.guid)}
-          >
-            Hapus
-          </Button>
-          <Button
-            size="sm"
-            className="bg-yellow mx-1"
-            onClick={() => onEdit(params.row)}
-          >
-            Edit
-          </Button>
-          <Button
-            size="sm"
-            className="bg-yellow mx-1"
-            onClick={() => onEdit(params.row)}
-          >
-            Detail
-          </Button>
+          <Tooltip content="Hapus">
+            <IconButton
+              size="sm"
+              className="bg-main mx-1"
+              onClick={() => handleDelete(params.id)}
+            >
+              <MdDelete />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Edit">
+            <IconButton
+              size="sm"
+              className="bg-yellow mx-1"
+              onClick={() => onEdit(params.row)}
+            >
+              <FaEdit />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Detail">
+            <IconButton size="sm" className="bg-yellow mx-1">
+              <MdInfo />
+            </IconButton>
+          </Tooltip>
         </>
       ),
     },

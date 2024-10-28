@@ -36,7 +36,7 @@ const router = createHashRouter([
         element: privatePages.profilepage,
       },
       {
-        path: "/announcement",
+        path: "/incident",
         element: privatePages.announcemnetpage,
       },
       {

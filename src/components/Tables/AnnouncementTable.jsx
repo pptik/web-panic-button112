@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Spinner } from "@material-tailwind/react";
+import {  IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
+import { FaPowerOff } from "react-icons/fa";
+import { FiSend } from "react-icons/fi";
+import { MdInfo } from "react-icons/md";
 
 const AnnouncementTable = ({ searchQuery, onEdit }) => {
   const [cases, setCases] = useState([]);
@@ -13,35 +16,33 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
     { field: "no", headerName: "No", width: 50 },
     { field: "sender", headerName: "Nama Pengirim", width: 160 },
     { field: "description", headerName: "Deskripsi", width: 240 },
-    { field: "deviceType", headerName: "Tipe Laporan", width: 120 },
-    { field: "address", headerName: "Alamat", width: 140 },
+    { field: "address", headerName: "Alamat", width: 130 },
+    { field: "status", headerName: "Status", width: 130 },
     {
       field: "actions",
       headerName: "Aksi",
       width: 260,
       renderCell: (params) => (
         <>
-          <Button
-            size="sm"
-            className="bg-main mx-1"
-            onClick={() => handleDelete(params.row.guid)}
-          >
-            Hapus
-          </Button>
-          <Button
-            size="sm"
-            className="bg-yellow mx-1"
-            onClick={() => onEdit(params.row)}
-          >
-            Edit
-          </Button>
-          <Button
-            size="sm"
-            className="bg-yellow mx-1"
-            onClick={() => onEdit(params.row)}
-          >
-            Detail
-          </Button>
+          <Tooltip content="Matikan">
+            <IconButton
+              size="sm"
+              className="border-main text-main mx-1"
+              variant="outlined"
+              onClick={() => TurnOffCase(params.id)}
+            >
+              <FaPowerOff />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Laporkan">
+            <IconButton
+              size="sm"
+              className="bg-main mx-1"
+              onClick={() => onEdit(params.id)}
+            >
+              <FiSend />
+            </IconButton>
+          </Tooltip>
         </>
       ),
     },
@@ -50,15 +51,14 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
   const getAllData = async () => {
     try {
       const response = await CaseService.GetCase();
-      console.log(response.data.data);
       if (response.data.status) {
         const fetchedData = response.data.data.map((data, index) => ({
           id: data.guid,
           no: index + 1,
           sender: data.sender,
           description: data.description,
-          deviceType: data.deviceType,
           address: data.address,
+          status: data.status,
         }));
         setCases(fetchedData);
       }
@@ -67,21 +67,21 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
     }
   };
 
-  const handleDelete = (id) => {
+  const TurnOffCase = (id) => {
     Swal.fire({
       title: "Apakah anda yakin?",
-      text: "Anda tidak akan bisa memulihkan data ini!",
+      text: "Anda akan mematikan perangkat ini!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#FFD245",
       cancelButtonColor: "#FF4545",
-      confirmButtonText: "Hapus",
+      confirmButtonText: "Matikan",
       cancelButtonText: "Batal",
     }).then(async (result) => {
       if (result.isConfirmed) {
         setLoading(true);
         try {
-          const response = await CaseService.DeleteCase(id);
+          const response = await CaseService.TurnOffCase(id);
           if (response.data.status) {
             AlertComponent.SuccessResponse(response.data.message);
             getAllData();
@@ -89,7 +89,9 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
-          AlertComponent.Error("Error deleting device", error.message);
+          console.log(error);
+
+          AlertComponent.Error(error.response.data.message);
         } finally {
           setLoading(false);
         }
