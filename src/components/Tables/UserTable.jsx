@@ -14,7 +14,7 @@ const UserTable = ({ searchQuery, onEdit }) => {
     { field: "name", headerName: "Nama ", width: 200 },
     { field: "email", headerName: "Email", width: 200 },
     { field: "phoneNumber", headerName: "Telepon", width: 170 },
-    { field: "address", headerName: "Telepon", width: 150 },
+    { field: "address", headerName: "Alamat", width: 150 },
     {
       field: "actions",
       headerName: "Aksi",

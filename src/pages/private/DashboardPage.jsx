@@ -1,26 +1,118 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/LayoutComponent";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import deviceMarker from "../../assets/marker-device.svg";
 import emergencyMarker from "../../assets/marker112.svg";
+import DeviceService from "../../services/service/DeviceService";
+import AlertComponent from "../../components/AlertComponent";
+import OPDService from "../../services/service/OPDService";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import defaultMarker from "../../assets/marker.png";
+import laporan from "../../assets/laporan.svg";
+import CaseService from "../../services/service/CaseService";
+import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+import IPayloadRMQ from "../../helpers/interfaces/IPayloadRmq.rmq";
+import { GetGuidCompany } from "../../helpers/AuthHeaders";
 
 // Define custom icons
 const deviceIcon = L.icon({
   iconUrl: deviceMarker,
-  iconSize: [38, 38], // Set size of the icon
-  iconAnchor: [22, 94], // Point of the icon which will correspond to marker's location
-  popupAnchor: [-3, -76], // Point from which the popup should open relative to the iconAnchor
+  iconSize: [38, 38],
+  iconAnchor: [18, 38],
+  popupAnchor: [-3, -38],
 });
 
 const emergencyIcon = L.icon({
   iconUrl: emergencyMarker,
   iconSize: [38, 38],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
+  iconAnchor: [18, 38],
+  popupAnchor: [-3, -38],
+});
+
+const defaultIcon = L.icon({
+  iconUrl: defaultMarker,
+  iconSize: [30, 45],
+  iconAnchor: [15, 45],
+  popupAnchor: [-3, -38],
 });
 
 const DashboardPage = () => {
+  const [devices, setDevices] = useState([]);
+  const [opds, setOpds] = useState([]);
+  const [cases, setCases] = useState([]);
+  const [caseDatas, setCaseData] = useState([]);
+  const navigate = useNavigate();
+  const socketRef = useRef(null); // Ref for WebSocket connection
+  const idCompany = GetGuidCompany();
+
+  const getDeviceData = async () => {
+    try {
+      const response = await DeviceService.GetDevice();
+      if (response.data.status) {
+        setDevices(response.data.data);
+      }
+    } catch (error) {
+      AlertComponent.Error("Error fetching devices");
+    }
+  };
+
+  const getOpdsData = async () => {
+    try {
+      const response = await OPDService.GetOPD();
+      if (response.data.status) {
+        setOpds(response.data.data);
+      }
+    } catch (error) {
+      AlertComponent.Error("Error fetching OPDs");
+    }
+  };
+
+  const getCaseData = async () => {
+    try {
+      const response = await CaseService.GetCase();
+      if (response.data.status) {
+        setCases(response.data.data);
+      }
+    } catch (error) {
+      AlertComponent.Error("Error fetching cases");
+    }
+  };
+
+  const checkCase = () => {
+    navigate("/incident");
+  };
+
+  const initializeWebSocket = () => {
+    socketRef.current = io("wss://api-panic-button112.lskk.co.id/");
+
+    socketRef.current.on("connect", () => {
+      console.log("Connected to WebSocket", socketRef.current.id);
+    });
+
+    socketRef.current.on(`case-112#${idCompany}`, (data = IPayloadRMQ) => {
+      console.log("Received data:", data);
+      setCaseData((prevData) => [...prevData, data]); // Append new data
+    });
+  };
+
+  useEffect(() => {
+    getDeviceData();
+    getOpdsData();
+    getCaseData();
+
+    initializeWebSocket();
+
+    // Cleanup WebSocket connection on component unmount
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
   return (
     <Layout>
       <div className="flex flex-col gap-2">
@@ -31,24 +123,108 @@ const DashboardPage = () => {
         <div className="bg-white p-3">
           <div>
             <MapContainer
-              center={[-6.90389, 107.61861]}
-              zoom={13}
+              center={[-6.905977, 107.613144]}
+              zoom={12}
               scrollWheelZoom={true}
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[-6.90389, 107.61861]} icon={deviceIcon}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-              <Marker position={[-6.90389, 107.63961]} icon={emergencyIcon}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
+              <MarkerClusterGroup chunkedLoading>
+                {devices?.map((device) => (
+                  <Marker
+                    key={device.id}
+                    position={[device.latitude, device.longitude]}
+                    icon={deviceIcon}
+                  >
+                    <Popup>{device.name}</Popup>
+                  </Marker>
+                ))}
+              </MarkerClusterGroup>
+              <MarkerClusterGroup chunkedLoading>
+                {opds?.map((opd) => (
+                  <Marker
+                    key={opd.id}
+                    position={[opd.latitude, opd.longitude]}
+                    icon={emergencyIcon}
+                  >
+                    <Popup>{opd.name}</Popup>
+                  </Marker>
+                ))}
+              </MarkerClusterGroup>
+              {cases?.map((cas) => (
+                <Marker
+                  key={cas.id}
+                  position={[cas.latitude, cas.longitude]}
+                  icon={defaultIcon}
+                >
+                  <Popup>
+                    <div className="flex flex-col gap-2">
+                      <h2 className="text-sm text-main font-bold tracking-wide">
+                        Laporan Masuk
+                      </h2>
+                      <img
+                        src={cas.imageUrl ? cas.imageUrl : laporan}
+                        alt="laporan masuk 112"
+                      />
+                      <div className="flex flex-col gap-1">
+                        <div>
+                          <span className="font-semibold">Nama : </span>
+                          {cas.sender}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Kondisi : </span>
+                          {cas.description}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Lokasi : </span>
+                          {cas.address}
+                        </div>
+                      </div>
+                      <Button className="bg-main" onClick={checkCase}>
+                        Lihat Laporan
+                      </Button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+              {caseDatas?.map((caseData) => (
+                <Marker
+                  key={caseData.id}
+                  position={[caseData.latitude, caseData.longitude]}
+                  icon={deviceIcon}
+                >
+                  <Popup>
+                    <div className="flex flex-col gap-2">
+                      <h2 className="text-sm text-main font-bold tracking-wide">
+                        Laporan Masuk
+                      </h2>
+                      <img
+                        src={cas.imageUrl ? cas.imageUrl : laporan}
+                        alt="laporan masuk 112"
+                      />
+                      <div className="flex flex-col gap-1">
+                        <div>
+                          <span className="font-semibold">Nama : </span>
+                          {cas.sender}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Kondisi : </span>
+                          {cas.description}
+                        </div>
+                        <div>
+                          <span className="font-semibold">Lokasi : </span>
+                          {cas.address}
+                        </div>
+                      </div>
+                      <Button className="bg-main" onClick={checkCase}>
+                        Lihat Laporan
+                      </Button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
             </MapContainer>
           </div>
           <div className="flex gap-5 mt-3">

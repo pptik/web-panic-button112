@@ -32,9 +32,9 @@ const Sidebar = () => {
       path: "/dashboard",
     },
     {
-      name: "Pemberitahuan",
+      name: "Kasus Kejadian",
       icon: RiHistoryFill,
-      path: "/announcement",
+      path: "/incident",
     },
     {
       name: "Riwayat Kejadian",
@@ -110,7 +110,6 @@ const Sidebar = () => {
                   min ? "text-sm text-blue tracking-widest" : "hidden"
                 }`}
               >
-                {/* {institusi ? institusi : ""} */}
               </h2>
             </div>
           </div>
