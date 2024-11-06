@@ -3,6 +3,7 @@ import Layout from "../../components/LayoutComponent";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "@ansur/leaflet-pulse-icon";
+import "@ansur/leaflet-pulse-icon/dist/L.Icon.Pulse.css";
 import deviceMarker from "../../assets/marker-device.svg";
 import emergencyMarker from "../../assets/marker112.svg";
 import DeviceService from "../../services/service/DeviceService";

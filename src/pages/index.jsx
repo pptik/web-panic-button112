@@ -2,6 +2,7 @@ import AnnouncementPage from "./private/AnnouncementPage";
 import CasePage from "./private/CasePage";
 import DashboardPage from "./private/DashboardPage";
 import DevicePage from "./private/DevicePage";
+import OPDAnnouncementPage from "./private/OPDAnnouncementPage";
 import OPDPage from "./private/OPDPage";
 import ProfilePage from "./private/ProfilePage";
 import UsersPage from "./private/UsersPage";
@@ -25,4 +26,5 @@ export const privatePages = {
   userspage: <UsersPage />,
   opdpage: <OPDPage />,
   announcemnetpage: <AnnouncementPage />,
+  opdannouncementpage: <OPDAnnouncementPage />,
 };
