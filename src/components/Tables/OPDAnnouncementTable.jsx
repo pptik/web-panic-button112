@@ -7,8 +7,10 @@ import CaseService from "../../services/service/CaseService";
 import { FaPowerOff } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import TransactionService from "../../services/service/TransactionService";
+import { GetGuidCompany } from "../../helpers/AuthHeaders";
 
-const AnnouncementTable = ({ searchQuery, onEdit }) => {
+const OPDAnnouncementTable = ({ searchQuery, onEdit }) => {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -58,11 +60,18 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
   ];
 
   const getAllData = async () => {
+    let data = {
+      page: 1,
+      limit: 10,
+      guidOpd: GetGuidCompany(),
+      isHandled: false,
+      status: "Menunggu Respon OPD",
+    };
     try {
-      const response = await CaseService.GetCase();
+      const response = await TransactionService.GetTransactionOpd(data);
       if (response.data.status) {
         const fetchedData = response.data.data.map((data, index) => ({
-          id: data.guid,
+          id: data.guidCase,
           no: index + 1,
           sender: data.sender,
           description: data.description,
@@ -72,7 +81,7 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
         setCases(fetchedData);
       }
     } catch (error) {
-      AlertComponent.Error("Error fetching devices");
+      AlertComponent.Error("Error fetching cases");
     }
   };
 
@@ -174,4 +183,4 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
   );
 };
 
-export default AnnouncementTable;
+export default OPDAnnouncementTable;

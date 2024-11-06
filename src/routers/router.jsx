@@ -1,6 +1,9 @@
 import { createHashRouter } from "react-router-dom";
 import { privatePages, publicPages } from "../pages";
 import RequireAuth from "./utils/requireAuth";
+import { GetRole } from "../helpers/AuthHeaders";
+
+const role = GetRole();
 
 const router = createHashRouter([
   {
@@ -37,7 +40,10 @@ const router = createHashRouter([
       },
       {
         path: "/incident",
-        element: privatePages.announcemnetpage,
+        element:
+          role === "super_admin"
+            ? privatePages.announcemnetpage
+            : privatePages.opdannouncementpage,
       },
       {
         path: "/case",
