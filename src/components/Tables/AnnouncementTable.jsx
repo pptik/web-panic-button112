@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import {  IconButton, Spinner, Tooltip } from "@material-tailwind/react";
+import { IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
 import { FaPowerOff } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { MdInfo } from "react-icons/md";
+import TransactionService from "../../services/service/TransactionService";
+import { GetGuidCompany, GetRole } from "../../helpers/AuthHeaders";
 
 const AnnouncementTable = ({ searchQuery, onEdit }) => {
   const [cases, setCases] = useState([]);
@@ -49,21 +51,48 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
   ];
 
   const getAllData = async () => {
-    try {
-      const response = await CaseService.GetCase();
-      if (response.data.status) {
-        const fetchedData = response.data.data.map((data, index) => ({
-          id: data.guid,
-          no: index + 1,
-          sender: data.sender,
-          description: data.description,
-          address: data.address,
-          status: data.status,
-        }));
-        setCases(fetchedData);
+    const role = GetRole();
+    if (role === "admin") {
+      let data = {  
+        page: 1,
+        limit: 10,
+        guidOpd: GetGuidCompany(),
+        isHandled: false,
+        status: "Menunggu Respon OPD",
+      };
+      try {
+        const response = await TransactionService.GetTransactionOpd(data);
+        if (response.data.status) {
+          const fetchedData = response.data.data.map((data, index) => ({
+            id: data.guidCase,
+            no: index + 1,
+            sender: data.sender,
+            description: data.description,
+            address: data.address,
+            status: data.status,
+          }));
+          setCases(fetchedData);
+        }
+      } catch (error) {
+        AlertComponent.Error("Error fetching cases");
       }
-    } catch (error) {
-      AlertComponent.Error("Error fetching devices");
+    } else if (role === "super_admin") {
+      try {
+        const response = await CaseService.GetCase();
+        if (response.data.status) {
+          const fetchedData = response.data.data.map((data, index) => ({
+            id: data.guid,
+            no: index + 1,
+            sender: data.sender,
+            description: data.description,
+            address: data.address,
+            status: data.status,
+          }));
+          setCases(fetchedData);
+        }
+      } catch (error) {
+        AlertComponent.Error("Error fetching devices");
+      }
     }
   };
 
