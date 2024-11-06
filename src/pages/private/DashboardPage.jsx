@@ -16,7 +16,8 @@ import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import IPayloadRMQ from "../../helpers/interfaces/IPayloadRmq.rmq";
-import { GetGuidCompany } from "../../helpers/AuthHeaders";
+import { GetGuidCompany, GetRole } from "../../helpers/AuthHeaders";
+import TransactionService from "../../services/service/TransactionService";
 
 // Define custom icons
 const deviceIcon = L.icon({
@@ -79,13 +80,32 @@ const DashboardPage = () => {
   };
 
   const getCaseData = async () => {
-    try {
-      const response = await CaseService.GetCase();
-      if (response.data.status) {
-        setCases(response.data.data);
+    const role = GetRole();
+    if (role === "admin") {
+      let data = {
+        page: 1,
+        limit: 10,
+        guidOpd: idCompany,
+        isHandled: false,
+        status: "Menunggu Respon OPD"
+      };
+      try {
+        const response = await TransactionService.GetTransactionOpd(data);
+        if (response.data.status) {
+          setCases(response.data.data);
+        }
+      } catch (error) {
+        AlertComponent.Error("Error fetching cases");
       }
-    } catch (error) {
-      AlertComponent.Error("Error fetching cases");
+    } else if (role === "super_admin") {
+      try {
+        const response = await CaseService.GetCase();
+        if (response.data.status) {
+          setCases(response.data.data);
+        }
+      } catch (error) {
+        AlertComponent.Error("Error fetching cases");
+      }
     }
   };
 
@@ -94,14 +114,28 @@ const DashboardPage = () => {
   };
 
   const initializeWebSocket = () => {
-    socketRef.current = io("wss://api-panic-button112.lskk.co.id/");
+    const role = GetRole();
+    if (role === "super_admin") {
+      socketRef.current = io("wss://api-panic-button112.lskk.co.id/");
 
-    socketRef.current.on("connect", () => {
-    });
+      socketRef.current.on("connect", () => {});
 
-    socketRef.current.on(`case-112#${idCompany}`, (data = IPayloadRMQ) => {
-      setCaseData((prevData) => [...prevData, data]); // Append new data
-    });
+      socketRef.current.on(`case-112#${idCompany}`, (data = IPayloadRMQ) => {
+        // console.log(data);
+        
+        setCaseData((prevData) => [...prevData, data]); // Append new data
+      });
+    } else if (role === "admin") {
+      socketRef.current = io("wss://api-panic-button112.lskk.co.id/");
+
+      socketRef.current.on("connect", () => {});
+
+      socketRef.current.on(`case-opd#${idCompany}`, (data = IPayloadRMQ) => {
+        // console.log(data);
+        
+        setCaseData((prevData) => [...prevData, data]); // Append new data
+      });
+    }
   };
 
   useEffect(() => {

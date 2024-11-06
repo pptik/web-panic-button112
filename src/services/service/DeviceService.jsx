@@ -28,7 +28,7 @@ class DeviceService {
     return res;
   }
 
-  static async UpdateDevice(guid) {
+  static async UpdateDevice(guid, data) {
     const res = await appApi.put(UPDATE_DEVICE(guid), data, {
       headers: AppHeaders(),
     });
