@@ -80,14 +80,14 @@ class UserService {
   }
 
   static async updateUser(guid) {
-    const res = await appApi.put(UPDATE_USERS(guid), data, {
+    const res = await userApi.put(UPDATE_USERS(guid), data, {
       headers: AuthHeaders(),
     });
     return res;
   }
 
   static async deleteUser(guid) {
-    const res = await appApi.delete(DELETE_USERS(guid), {
+    const res = await userApi.delete(DELETE_USERS(guid), {
       headers: AuthHeaders(),
     });
     return res;

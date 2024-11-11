@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Layout from "../../components/LayoutComponent";
 import CaseTable from "../../components/Tables/CaseTable";
 import { Input } from "@material-tailwind/react";
+import { UpdateCase } from "../../components/Modals/UpdateCase";
 
 export default class CasePage extends Component {
   constructor() {
@@ -51,6 +52,13 @@ export default class CasePage extends Component {
             />
           </div>
         </div>
+        {this.state.show && (
+          <UpdateCase
+            isOpen={this.state.show}
+            onClose={() => this.setState({ show: false })}
+            data={this.state.selectedDevice}
+          />
+        )}
       </Layout>
     );
   }

@@ -12,6 +12,7 @@ import OPDAnnouncementTable from "../../components/Tables/OPDAnnouncementTable";
 import { EStatusCase } from "../../helpers/types/EStatusCase"; // Adjust the path as needed
 import OPDCaseTable from "../../components/Tables/OPDCaseTable";
 import HandlingCaseTable from "../../components/Tables/HandlingCaseTable";
+import { UpdateCase } from "../../components/Modals/UpdateCase";
 
 export default class OPDAnnouncementPage extends Component {
   constructor() {
@@ -100,7 +101,7 @@ export default class OPDAnnouncementPage extends Component {
                         handle={isHandled}
                         onPageChange={this.handlePageChange}
                         onPageSizeChange={this.handlePageSizeChange}
-                        onEdit={this.handleOpen}
+                        onEdit={this.handleOpen.bind(this)}
                       />
                     ) : statusValue === EStatusCase.DALAM_PENANGANAN ? (
                       <HandlingCaseTable
@@ -111,7 +112,7 @@ export default class OPDAnnouncementPage extends Component {
                         handle={isHandled}
                         onPageChange={this.handlePageChange}
                         onPageSizeChange={this.handlePageSizeChange}
-                        onEdit={this.handleOpen}
+                        onEdit={this.handleOpen.bind(this)}
                       />
                     ) : (
                       <OPDAnnouncementTable
@@ -123,7 +124,7 @@ export default class OPDAnnouncementPage extends Component {
                         handle={isHandled}
                         onPageChange={this.handlePageChange}
                         onPageSizeChange={this.handlePageSizeChange}
-                        onEdit={this.handleOpen}
+                        onEdit={this.handleOpen.bind(this)}
                       />
                     )}
                   </TabPanel>
@@ -132,6 +133,13 @@ export default class OPDAnnouncementPage extends Component {
             </Tabs>
           </div>
         </div>
+        {this.state.show && (
+          <UpdateCase
+            isOpen={this.state.show}
+            onClose={() => this.setState({ show: false })}
+            data={this.state.selected}
+          />
+        )}
       </Layout>
     );
   }
