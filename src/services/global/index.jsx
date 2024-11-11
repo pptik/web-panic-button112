@@ -36,6 +36,7 @@ const API_ENDPOINT = {
   TURN_OFF_CASE: (guid) => `${API_URL}case/turn-off-actuator/${guid}`,
   ADD_TRANSACTION: (guid) => `${API_URL}case-trx/${guid}`,
   GET_TRANSACTION: (data) => `${API_URL}case-trx?${data}`,
+  CHANGE_STATUS_HANDLING: (guid) => `${API_URL}case-trx/change-status/${guid}`,
 };
 
 export default API_ENDPOINT;

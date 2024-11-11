@@ -3,7 +3,8 @@ import { AppHeaders } from "../../helpers/AuthHeaders";
 import API_ENDPOINT from "../global";
 import { appApi } from "../global/config";
 
-const { ADD_TRANSACTION, GET_TRANSACTION } = API_ENDPOINT;
+const { ADD_TRANSACTION, GET_TRANSACTION, CHANGE_STATUS_HANDLING } =
+  API_ENDPOINT;
 
 class TransactionService {
   static async AddTransactionBySuperAdmin(guid, data) {
@@ -18,6 +19,17 @@ class TransactionService {
     const res = await appApi.get(GET_TRANSACTION(stringified), {
       headers: AppHeaders(),
     });
+    return res;
+  }
+
+  static async ChangeStatusHandling(guid) {
+    const res = await appApi.put(
+      CHANGE_STATUS_HANDLING(guid),
+      {},
+      {
+        headers: AppHeaders(),
+      }
+    );
     return res;
   }
 }
