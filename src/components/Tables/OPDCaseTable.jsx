@@ -4,13 +4,13 @@ import { IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
-import { FaPowerOff } from "react-icons/fa";
+import { FaEdit, FaPowerOff } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdInfo } from "react-icons/md";
 import TransactionService from "../../services/service/TransactionService";
 import { GetGuidCompany } from "../../helpers/AuthHeaders";
 
-const OPDAnnouncementTable = ({
+const OPDCaseTable = ({
   searchQuery,
   onEdit,
   page,
@@ -19,7 +19,6 @@ const OPDAnnouncementTable = ({
   onPageChange,
   onPageSizeChange,
   handled,
-  onStatusChange,
 }) => {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,23 +45,18 @@ const OPDAnnouncementTable = ({
               <MdDelete />
             </IconButton>
           </Tooltip>
-          <Tooltip content="Matikan">
+          <Tooltip content="Edit">
             <IconButton
               size="sm"
-              className="border-main text-main mx-1"
-              variant="outlined"
-              onClick={() => TurnOffCase(params.id)}
+              className="bg-yellow mx-1"
+              onClick={() => onEdit(params.row)}
             >
-              <FaPowerOff />
+              <FaEdit />
             </IconButton>
           </Tooltip>
-          <Tooltip content="Terima Kasus">
-            <IconButton
-              size="sm"
-              className="bg-main mx-1"
-              onClick={() => handleCaseStatus(params.row.guid)}
-            >
-              <FiSend />
+          <Tooltip content="Detail">
+            <IconButton size="sm" className="bg-yellow mx-1">
+              <MdInfo />
             </IconButton>
           </Tooltip>
         </>
@@ -100,38 +94,6 @@ const OPDAnnouncementTable = ({
     });
   };
 
-  const handleCaseStatus = (id) => {
-    Swal.fire({
-      title: "Apakah anda yakin menerima kasus ini?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#FFD245",
-      cancelButtonColor: "#FF4545",
-      confirmButtonText: "Terima",
-      cancelButtonText: "Batal",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setLoading(true);
-        try {
-          const response = await TransactionService.ChangeStatusHandling(id);
-          if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
-            onStatusChange("Dalam Penanganan");
-            setInterval(() => {
-              window.location.reload();
-            }, 2000);
-          } else {
-            AlertComponent.Error(response.data.message);
-          }
-        } catch (error) {
-          AlertComponent.Error("Error deleting device", error.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    });
-  };
-
   const getAllData = async () => {
     if (status === "Dalam Penanganan" || status === "Selesai") {
       setHandle(true);
@@ -148,7 +110,6 @@ const OPDAnnouncementTable = ({
       if (response.data.status) {
         const fetchedData = response.data.data.map((data, index) => ({
           id: data.guidCase,
-          guid: data.guid,
           no: index + 1,
           sender: data.sender,
           description: data.description,
@@ -165,38 +126,6 @@ const OPDAnnouncementTable = ({
   useEffect(() => {
     getAllData();
   }, [page, limit, status, handled]);
-
-  const TurnOffCase = (id) => {
-    Swal.fire({
-      title: "Apakah anda yakin?",
-      text: "Anda akan mematikan perangkat ini!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#FFD245",
-      cancelButtonColor: "#FF4545",
-      confirmButtonText: "Matikan",
-      cancelButtonText: "Batal",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setLoading(true);
-        try {
-          const response = await CaseService.TurnOffCase(id);
-          if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
-            getAllData();
-          } else {
-            AlertComponent.Error(response.data.message);
-          }
-        } catch (error) {
-          console.log(error);
-
-          AlertComponent.Error(error.response.data.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    });
-  };
 
   const filteredDatas = cases.filter((caseData) => {
     if (!caseData.sender) return true;
@@ -228,4 +157,4 @@ const OPDAnnouncementTable = ({
   );
 };
 
-export default OPDAnnouncementTable;
+export default OPDCaseTable;

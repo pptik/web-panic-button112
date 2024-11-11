@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { BiPlus } from "react-icons/bi";
 import OPDTable from "../../components/Tables/OPDTable";
 import Layout from "../../components/LayoutComponent";
+import { AddOPD } from "../../components/Modals/AddOPD";
+import { UpdateOPD } from "../../components/Modals/UpdateOPD";
 
 export default class OPDPage extends Component {
   constructor() {
@@ -12,8 +14,29 @@ export default class OPDPage extends Component {
       showAdd: false,
       searchQuery: "",
       selectedDevice: null,
+      usersLocation: { lat: -6.905977, lng: 107.613144 },
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.setUserLocation(); // Set user location on mount
+  }
+
+  setUserLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          usersLocation: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        });
+      },
+      () => {
+        console.warn("Geolocation not available; using default location.");
+      }
+    );
   }
 
   handleInputChange(event) {
@@ -21,10 +44,12 @@ export default class OPDPage extends Component {
   }
 
   handleOpen(device) {
+    this.setUserLocation();
     this.setState({ show: !this.state.show, selectedDevice: device });
   }
 
   handleAddOpen() {
+    this.setUserLocation();
     this.setState({ showAdd: !this.state.showAdd });
   }
 
@@ -60,6 +85,21 @@ export default class OPDPage extends Component {
             />
           </div>
         </div>
+        {this.state.showAdd && (
+          <AddOPD
+            isOpen={this.state.showAdd}
+            onClose={() => this.setState({ showAdd: false })}
+            initialCenter={this.state.usersLocation}
+          />
+        )}
+        {this.state.show && (
+          <UpdateOPD
+            isOpen={this.state.show}
+            onClose={() => this.setState({ show: false })}
+            data={this.state.selectedDevice}
+            initialCenter={this.state.usersLocation}
+          />
+        )}
       </Layout>
     );
   }

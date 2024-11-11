@@ -1,7 +1,17 @@
 import React, { Component } from "react";
 import Layout from "../../components/LayoutComponent";
-import { Input } from "@material-tailwind/react";
+import {
+  Input,
+  Tab,
+  TabPanel,
+  Tabs,
+  TabsBody,
+  TabsHeader,
+} from "@material-tailwind/react";
 import OPDAnnouncementTable from "../../components/Tables/OPDAnnouncementTable";
+import { EStatusCase } from "../../helpers/types/EStatusCase"; // Adjust the path as needed
+import OPDCaseTable from "../../components/Tables/OPDCaseTable";
+import HandlingCaseTable from "../../components/Tables/HandlingCaseTable";
 
 export default class OPDAnnouncementPage extends Component {
   constructor() {
@@ -11,24 +21,45 @@ export default class OPDAnnouncementPage extends Component {
       showAdd: false,
       searchQuery: "",
       selected: null,
+      page: 0, // Start from 0 since DataGrid uses zero-based indexing
+      limit: 10,
+      isHandled: false,
+      status: EStatusCase.MENUNGGU_RESPON_OPD, // Default status
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
-  }
+  };
 
-  handleOpen(data) {
-    console.log(data);
+  handlePageChange = (newPage) => {
+    this.setState({ page: newPage });
+  };
+
+  handlePageSizeChange = (newPageSize) => {
+    this.setState({ limit: newPageSize, page: 0 }); // Reset to first page
+  };
+
+  handleOpen = (data) => {
     this.setState({ show: !this.state.show, selected: data });
-  }
+  };
 
-  handleAddOpen() {
+  handleAddOpen = () => {
     this.setState({ showAdd: !this.state.showAdd });
-  }
+  };
+
+  handleStatusChange = (status) => {
+    this.setState({ status, page: 0 }); // Reset to first page on status change
+  };
+
+  handleCaseStatusChange = (newStatus) => {
+    this.setState({ status: newStatus, page: 0 });
+    this.handleStatusChange(newStatus);
+  };
 
   render() {
+    const { page, limit, status, searchQuery, isHandled } = this.state;
+
     return (
       <Layout>
         <div className="flex flex-col gap-2">
@@ -37,19 +68,68 @@ export default class OPDAnnouncementPage extends Component {
             Kasus Kejadian
           </h1>
           <div className="bg-white p-3">
-            <div className="mt-3 flex gap-3">
-              <Input
-                type="text"
-                label="Cari nama ..."
-                name="searchQuery"
-                value={this.state.searchQuery}
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <OPDAnnouncementTable
-              searchQuery={this.state.searchQuery}
-              onEdit={this.handleOpen.bind(this)}
-            />
+            <Tabs
+              value={status}
+              onChange={(value) => this.handleStatusChange(value)}
+            >
+              <TabsHeader className="bg-main">
+                {Object.values(EStatusCase).map((statusValue) => (
+                  <Tab key={statusValue} value={statusValue}>
+                    {statusValue}
+                  </Tab>
+                ))}
+              </TabsHeader>
+              <TabsBody>
+                {Object.values(EStatusCase).map((statusValue) => (
+                  <TabPanel key={statusValue} value={statusValue}>
+                    <div className="mt-3 flex gap-3">
+                      <Input
+                        type="text"
+                        label="Cari nama ..."
+                        name="searchQuery"
+                        value={searchQuery}
+                        onChange={this.handleInputChange}
+                      />
+                    </div>
+                    {statusValue === EStatusCase.SELESAI ? (
+                      <OPDCaseTable
+                        searchQuery={searchQuery}
+                        page={page}
+                        limit={limit}
+                        status={statusValue}
+                        handle={isHandled}
+                        onPageChange={this.handlePageChange}
+                        onPageSizeChange={this.handlePageSizeChange}
+                        onEdit={this.handleOpen}
+                      />
+                    ) : statusValue === EStatusCase.DALAM_PENANGANAN ? (
+                      <HandlingCaseTable
+                        searchQuery={searchQuery}
+                        page={page}
+                        limit={limit}
+                        status={statusValue}
+                        handle={isHandled}
+                        onPageChange={this.handlePageChange}
+                        onPageSizeChange={this.handlePageSizeChange}
+                        onEdit={this.handleOpen}
+                      />
+                    ) : (
+                      <OPDAnnouncementTable
+                        onStatusChange={this.handleCaseStatusChange}
+                        searchQuery={searchQuery}
+                        page={page}
+                        limit={limit}
+                        status={statusValue}
+                        handle={isHandled}
+                        onPageChange={this.handlePageChange}
+                        onPageSizeChange={this.handlePageSizeChange}
+                        onEdit={this.handleOpen}
+                      />
+                    )}
+                  </TabPanel>
+                ))}
+              </TabsBody>
+            </Tabs>
           </div>
         </div>
       </Layout>

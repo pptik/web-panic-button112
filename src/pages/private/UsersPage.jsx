@@ -3,6 +3,8 @@ import Layout from "../../components/LayoutComponent";
 import UserTable from "../../components/Tables/UserTable";
 import { Button, Input, Tooltip } from "@material-tailwind/react";
 import { BiPlus } from "react-icons/bi";
+import { AddUser } from "../../components/Modals/AddUser";
+import { UpdateUser } from "../../components/Modals/UpdateUser";
 
 class UsersPage extends Component {
   constructor() {
@@ -62,6 +64,18 @@ class UsersPage extends Component {
             />
           </div>
         </div>
+        {this.state.showAdd && (
+          <AddUser
+            isOpen={this.state.showAdd}
+            onClose={() => this.setState({ showAdd: false })}
+          />
+        )}
+        {this.state.show && (
+          <UpdateUser
+            isOpen={this.state.show}
+            onClose={() => this.setState({ show: false })}
+          />
+        )}
       </Layout>
     );
   }
