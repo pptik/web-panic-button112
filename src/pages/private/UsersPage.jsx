@@ -74,6 +74,7 @@ class UsersPage extends Component {
           <UpdateUser
             isOpen={this.state.show}
             onClose={() => this.setState({ show: false })}
+            data={this.state.selectedDevice}
           />
         )}
       </Layout>

@@ -19,7 +19,6 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import marker from "../../assets/marker.png";
-import DeviceService from "../../services/service/DeviceService";
 import AlertComponent from "../AlertComponent";
 import OPDService from "../../services/service/OPDService";
 
@@ -69,25 +68,9 @@ export const AddOPD = ({ isOpen, onClose, initialCenter }) => {
   const [latitude, setLatitude] = useState(initialCenter.lat);
   const [longitude, setLongitude] = useState(initialCenter.lng);
   const [name, setName] = useState("");
-  const [guid, setGuid] = useState("");
-  const [type, setType] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("")
   const [isLoading, setIsLoading] = useState(false);
-  const [opds, setOpds] = useState([]);
-
-  const getOpds = async () => {
-    try {
-      const response = await OPDService.GetOPD();
-      if (response.data.status) {
-        setOpds(response.data.data);
-      }
-    } catch (error) {
-      AlertComponent.Error("Error fetching devices");
-    }
-  };
-
-  useEffect(() => {
-    getOpds();
-  });
 
   useEffect(() => {
     setCenter(initialCenter);
@@ -113,34 +96,34 @@ export const AddOPD = ({ isOpen, onClose, initialCenter }) => {
   const handleSave = async () => {
     if (name === "") {
       onClose();
-      AlertComponent.Error("Silakan masukkan nama perangkat");
+      AlertComponent.Error("Silakan masukkan nama opd");
       return;
     }
-    if (type === "") {
+    if (email === "") {
       onClose();
-      AlertComponent.Error("Silakan pilih  jenis perangkat");
+      AlertComponent.Error("Silakan masukan email opd");
       return;
     }
-    if (guid === "") {
+    if (address === "") {
       onClose();
-      AlertComponent.Error("Silakan masukkan guid perangkat");
+      AlertComponent.Error("Silakan masukkan alamat lengkap opd");
       return;
     }
     if (latitude === "" || longitude === "") {
       onClose();
-      AlertComponent.Error("Silakan pilih posisi perangkat");
+      AlertComponent.Error("Silakan pilih posisi opd");
       return;
     }
     setIsLoading(true);
     let data = {
-      guidDevice: guid,
+      address: address,
       name: name,
-      type: type,
+      email: email,
       latitude: latitude,
       longitude: longitude,
     };
     try {
-      const response = await DeviceService.AddDevice(data);
+      const response = await OPDService.AddOPD(data);
       setIsLoading(false);
       onClose();
       AlertComponent.SuccessResponse(response.data.message);
@@ -182,38 +165,29 @@ export const AddOPD = ({ isOpen, onClose, initialCenter }) => {
               Tambah OPD
             </Typography>
             <Input
-              label="Nama Device"
+              label="Nama OPD"
               size="lg"
               value={name}
               onChange={(e) => setName(e.target.value)}
               crossOrigin={undefined}
               required
             />
-            <select
-              name="guid"
-              id="guid"
-              value={guid}
-              onChange={(e) => setGuid(e.target.value)}
+            <Input
+              label="Email OPD"
+              size="lg"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              crossOrigin={undefined}
               required
-              className="p-3 border rounded-md border-blue-gray-200"
-            >
-              <option value="">Pilih OPD</option>
-              {opds?.map((opd) => (
-                <option value={opd.guid}>{opd.name}</option>
-              ))}
-            </select>
-            <select
-              name="type"
-              id="type"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
+            />
+            <Input
+              label="Alamat Lengkap OPD"
+              size="lg"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              crossOrigin={undefined}
               required
-              className="p-3 border rounded-md border-blue-gray-200"
-            >
-              <option value="">Tipe Perangkat</option>
-              <option value="Aktuator">Aktuator</option>
-              <option value="Sensor">Sensor</option>
-            </select>
+            />
             <p className="text-xs text-red-500">*Klik posisi di map</p>
             <Input
               label="Latitude"

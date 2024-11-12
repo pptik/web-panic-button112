@@ -79,7 +79,7 @@ class UserService {
     return res;
   }
 
-  static async updateUser(guid) {
+  static async updateUser(guid, data) {
     const res = await userApi.put(UPDATE_USERS(guid), data, {
       headers: AuthHeaders(),
     });

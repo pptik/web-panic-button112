@@ -5,12 +5,71 @@ import {
   CardFooter,
   Dialog,
   Input,
+  Spinner,
   Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import UserService from "../../services/service/UserService";
+import AlertComponent from "../AlertComponent";
 
-export const UpdateUser = ({ isOpen, onClose }) => {
+export const UpdateUser = ({ isOpen, onClose, data }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [guid, setGuid] = useState("")
+
+  useEffect(() => {    
+    setName(data.name)
+    setEmail(data.email)
+    setAddress(data.address)
+    setPhone(data.phoneNumber)
+    setGuid(data.id)
+  }, [])
+
+  const handleSave = async () => {
+    if (name === "") {
+      onClose();
+      AlertComponent.Error("Silakan masukkan nama");
+      return;
+    }
+    if (email === "") {
+      onClose();
+      AlertComponent.Error("Silakan masukan email");
+      return;
+    }
+    if (address === "") {
+      onClose();
+      AlertComponent.Error("Silakan masukan password");
+      return;
+    }
+    if (phone === "") {
+      onClose();
+      AlertComponent.Error("Silakan masukan telepon");
+      return;
+    }
+    setIsLoading(true);
+    let data = {
+      email: email,
+      name: name,
+      phoneNumber: phone,
+      address: address
+    };
+    try {
+      const response = await UserService.updateUser(guid,data);
+      setIsLoading(false);
+      onClose();
+      AlertComponent.SuccessResponse(response.data.message);
+      setInterval(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      onClose();
+      AlertComponent.Error(error.response.data.message);
+    }
+  };
+
   return (
     <Dialog
       open={isOpen}
@@ -24,26 +83,34 @@ export const UpdateUser = ({ isOpen, onClose }) => {
             Update Pengguna
           </Typography>
           <Input
-            label="Nama Device"
+            label="Nama Lengkap"
             size="lg"
-            // value={name}
-            // onChange={(e) => setName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             crossOrigin={undefined}
             required
           />
           <Input
-            label="Latitude"
+            label="Email"
             size="lg"
-            // value={latitude}
-            // onChange={(e) => setLatitude(parseFloat(e.target.value))}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             crossOrigin={undefined}
             required
           />
           <Input
-            label="Longitude"
+            label="Telepon"
             size="lg"
-            // value={longitude}
-            // onChange={(e) => setLongitude(parseFloat(e.target.value))}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            crossOrigin={undefined}
+            required
+          />
+          <Input
+            label="Alamat"
+            size="lg"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             crossOrigin={undefined}
             required
           />
@@ -52,7 +119,7 @@ export const UpdateUser = ({ isOpen, onClose }) => {
           <Button
             variant="filled"
             className="bg-main flex justify-center items-center"
-            // onClick={handleSave}
+            onClick={handleSave}
             fullWidth
             disabled={isLoading}
           >
