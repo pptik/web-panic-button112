@@ -65,6 +65,15 @@ const OPDAnnouncementTable = ({
               <FiSend />
             </IconButton>
           </Tooltip>
+          <Tooltip content="Edit">
+            <IconButton
+              size="sm"
+              className="bg-yellow mx-1"
+              onClick={() => onEdit(params.row)}
+            >
+              <FaEdit />
+            </IconButton>
+          </Tooltip>
         </>
       ),
     },

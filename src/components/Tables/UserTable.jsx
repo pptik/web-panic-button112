@@ -75,14 +75,15 @@ const UserTable = ({ searchQuery, onEdit }) => {
         setLoading(true);
         try {
           const response = await UserService.deleteUser(id);
-          if (response.data.status) {
+          if (response.data.success) {
             AlertComponent.SuccessResponse(response.data.message);
             getAllData(); // Pastikan `getAllData` dipanggil tanpa spasi tambahan
           } else {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
-          AlertComponent.Error("Error deleting device", error.message);
+          console.log(error);
+          AlertComponent.Error("Error deleting users", error.message);
         } finally {
           setLoading(false);
         }

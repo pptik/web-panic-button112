@@ -19,7 +19,6 @@ import {
 } from "react-leaflet";
 import marker from "../../assets/marker.png";
 import AlertComponent from "../AlertComponent";
-import DeviceService from "../../services/service/DeviceService";
 import OPDService from "../../services/service/OPDService";
 
 // LocationMarker component
@@ -67,9 +66,10 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
   const [latitude, setLatitude] = useState(initialCenter.lat);
   const [longitude, setLongitude] = useState(initialCenter.lng);
   const [name, setName] = useState("");
-  const [guid, setGuid] = useState("");
-  const [type, setType] = useState("");
+  const [address, setAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [guid, setGuid] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleMapClick = (latlng) => {
     setLatitude(latlng.lat);
@@ -86,14 +86,15 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
   }, [initialCenter]);
 
   useEffect(() => {
-    console.log(data);
     if (data) {
+      console.log(data);
       setCenter({ lat: data.latitude, lng: data.longitude });
       setLatitude(data.latitude);
       setLongitude(data.longitude);
       setName(data.name || "");
-      setGuid(data.guid || "");
-      setType(data.type || "");
+      setAddress(data.address || "");
+      setGuid(data.id || "");
+      setEmail(data.email || "");
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -112,14 +113,14 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
   const handleSave = async () => {
     setIsLoading(true);
     let data = {
-      guidDevice: guid,
-      name: name,
-      type: type,
-      latitude: latitude,
-      longitude: longitude,
+      name,
+      address,
+      email,
+      longitude,
+      latitude
     };
     try {
-      const response = await DeviceService.UpdateDevice(guid, data);
+      const response = await OPDService.UpdateOPD(guid, data);
       setIsLoading(false);
       onClose();
       AlertComponent.SuccessResponse(response.data.message);
@@ -161,30 +162,36 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
               Update OPD
             </Typography>
             <Input
-              label="Nama Device"
+              label="Nama OPD"
               size="lg"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              crossOrigin={undefined}
               required
             />
-            <select
-              name="type"
-              id="type"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
+            <Input
+              label="Email OPD"
+              size="lg"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              crossOrigin={undefined}
               required
-              className="p-3 border rounded-md border-blue-gray-200"
-            >
-              <option value="">Tipe Perangkat</option>
-              <option value="Aktuator">Sirine</option>
-              <option value="Sensor">Tombol</option>
-            </select>
+            />
+            <Input
+              label="Alamat Lengkap OPD"
+              size="lg"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              crossOrigin={undefined}
+              required
+            />
             <p className="text-xs text-red-500">*Klik posisi di map</p>
             <Input
               label="Latitude"
               size="lg"
               value={latitude}
               onChange={(e) => setLatitude(parseFloat(e.target.value))}
+              crossOrigin={undefined}
               required
             />
             <Input
@@ -192,6 +199,7 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
               size="lg"
               value={longitude}
               onChange={(e) => setLongitude(parseFloat(e.target.value))}
+              crossOrigin={undefined}
               required
             />
           </CardBody>

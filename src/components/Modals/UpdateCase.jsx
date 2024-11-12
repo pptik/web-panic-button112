@@ -8,56 +8,31 @@ import {
   Spinner,
   Typography,
 } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-import UserService from "../../services/service/UserService";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
+import CaseService from "../../services/service/CaseService";
 import AlertComponent from "../AlertComponent";
 
-export const UpdateUser = ({ isOpen, onClose, data }) => {
+export const UpdateCase = ({ isOpen, onClose, data }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [guid, setGuid] = useState("")
+  const [guid, setGuid] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {    
-    setName(data.name)
-    setEmail(data.email)
-    setAddress(data.address)
-    setPhone(data.phoneNumber)
-    setGuid(data.id)
-  }, [])
+    if (data) {
+      setName(data.sender);
+      setGuid(data.id);
+      setDescription(data.description);
+    }
+  }, []);
 
   const handleSave = async () => {
-    if (name === "") {
-      onClose();
-      AlertComponent.Error("Silakan masukkan nama");
-      return;
-    }
-    if (email === "") {
-      onClose();
-      AlertComponent.Error("Silakan masukan email");
-      return;
-    }
-    if (address === "") {
-      onClose();
-      AlertComponent.Error("Silakan masukan password");
-      return;
-    }
-    if (phone === "") {
-      onClose();
-      AlertComponent.Error("Silakan masukan telepon");
-      return;
-    }
     setIsLoading(true);
     let data = {
-      email: email,
-      name: name,
-      phoneNumber: phone,
-      address: address
+      description,
     };
     try {
-      const response = await UserService.updateUser(guid,data);
+      const response = await CaseService.UpdateCase(guid, data);
       setIsLoading(false);
       onClose();
       AlertComponent.SuccessResponse(response.data.message);
@@ -80,37 +55,21 @@ export const UpdateUser = ({ isOpen, onClose, data }) => {
       <Card className="flex flex-col">
         <CardBody className="flex flex-col gap-2">
           <Typography variant="h4" color="blue-gray">
-            Update Pengguna
+            Update Case
           </Typography>
           <Input
-            label="Nama Lengkap"
+            label="Nama Pengirim"
             size="lg"
             value={name}
-            onChange={(e) => setName(e.target.value)}
             crossOrigin={undefined}
             required
+            readOnly
           />
           <Input
-            label="Email"
+            label="Deskripsi"
             size="lg"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            crossOrigin={undefined}
-            required
-          />
-          <Input
-            label="Telepon"
-            size="lg"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            crossOrigin={undefined}
-            required
-          />
-          <Input
-            label="Alamat"
-            size="lg"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             crossOrigin={undefined}
             required
           />
