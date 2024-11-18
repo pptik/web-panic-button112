@@ -8,6 +8,7 @@ const {
   GET_DEVICE_BY_ID,
   UPDATE_DEVICE,
   DELETE_DEVICE,
+  UPDATE_STATUS_DEVICE,
 } = API_ENDPOINT;
 
 class DeviceService {
@@ -39,6 +40,17 @@ class DeviceService {
     const res = await appApi.delete(DELETE_DEVICE(guid), {
       headers: AppHeaders(),
     });
+    return res;
+  }
+
+  static async UpdateStatusDevice(guid, status) {
+    const res = await appApi.put(
+      UPDATE_STATUS_DEVICE(guid, status),
+      {},
+      {
+        headers: AppHeaders(),
+      }
+    );
     return res;
   }
 }

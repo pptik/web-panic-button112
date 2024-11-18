@@ -46,7 +46,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
           <Button
             size="sm"
             className="bg-main mx-1"
-            // onClick={() => handleDelete(params.row.guid)}
+            onClick={() => HandleOffDevice(params.row)}
           >
             Matikan
           </Button>
@@ -54,7 +54,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
             variant="outlined"
             size="sm"
             className="border-main text-main mx-1"
-            onClick={() => onEdit(params.row)}
+            onClick={() => HandleOnDevice(params.row)}
           >
             Aktifkan
           </Button>
@@ -109,6 +109,142 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
         }
       }
     });
+  };
+
+  const HandleOnDevice = (data) => {
+    if (data.type === "Sensor") {
+      let status = 0;
+      Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Ingin menyalakan device?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#FFD245",
+        cancelButtonColor: "#FF4545",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setLoading(true);
+          try {
+            const response = await DeviceService.UpdateStatusDevice(
+              data.guid,
+              status
+            );
+            if (response.data.status) {
+              AlertComponent.SuccessResponse(response.data.message);
+              getAllDevice();
+            } else {
+              AlertComponent.Error(response.data.message);
+            }
+          } catch (error) {
+            AlertComponent.Error("Error deleting device", error.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+      });
+    } else if (data.type === "Aktuator") {
+      let status = 1;
+      Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Ingin menyalakan device?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#FFD245",
+        cancelButtonColor: "#FF4545",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setLoading(true);
+          try {
+            const response = await DeviceService.UpdateStatusDevice(
+              data.guid,
+              status
+            );
+            if (response.data.status) {
+              AlertComponent.SuccessResponse(response.data.message);
+              getAllDevice();
+            } else {
+              AlertComponent.Error(response.data.message);
+            }
+          } catch (error) {
+            AlertComponent.Error("Error deleting device", error.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+      });
+    }
+  };
+
+  const HandleOffDevice = (data) => {
+    if (data.type === "Sensor") {
+      let status = 1;
+      Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Ingin menyalakan device?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#FFD245",
+        cancelButtonColor: "#FF4545",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setLoading(true);
+          try {
+            const response = await DeviceService.UpdateStatusDevice(
+              data.guid,
+              status
+            );
+            if (response.data.status) {
+              AlertComponent.SuccessResponse(response.data.message);
+              getAllDevice();
+            } else {
+              AlertComponent.Error(response.data.message);
+            }
+          } catch (error) {
+            AlertComponent.Error("Error deleting device", error.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+      });
+    } else if (data.type === "Aktuator") {
+      let status = 0;
+      Swal.fire({
+        title: "Apakah anda yakin?",
+        text: "Ingin menyalakan device?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#FFD245",
+        cancelButtonColor: "#FF4545",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setLoading(true);
+          try {
+            const response = await DeviceService.UpdateStatusDevice(
+              data.guid,
+              status
+            );
+            if (response.data.status) {
+              AlertComponent.SuccessResponse(response.data.message);
+              getAllDevice();
+            } else {
+              AlertComponent.Error(response.data.message);
+            }
+          } catch (error) {
+            AlertComponent.Error("Error deleting device", error.message);
+          } finally {
+            setLoading(false);
+          }
+        }
+      });
+    }
   };
 
   useEffect(() => {
