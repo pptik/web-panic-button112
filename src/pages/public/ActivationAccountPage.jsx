@@ -29,7 +29,7 @@ const ActivationAccountPage = () => {
     try {
       const res = await UserService.activateAccount(data);
       if (res.data.success) {
-        AlertComponent.SuccessResponse(res.data.message);
+        AlertComponent.SuccessResponse("Berhasil Mengaktifkan Akun");
       } else {
         AlertComponent.Error(res.data.message);
       }

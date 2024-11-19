@@ -60,7 +60,7 @@ export const UpdateUser = ({ isOpen, onClose, data }) => {
       const response = await UserService.updateUser(guid,data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Mengubah Pengguna");
       setInterval(() => {
         window.location.reload();
       }, 2000);

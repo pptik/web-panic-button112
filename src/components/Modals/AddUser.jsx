@@ -69,7 +69,7 @@ export const AddUser = ({ isOpen, onClose }) => {
       const response = await UserService.register(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Menambahkan Pengguna");
       setInterval(() => {
         window.location.reload();
       }, 2000);
