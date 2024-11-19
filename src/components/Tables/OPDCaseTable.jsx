@@ -54,11 +54,13 @@ const OPDCaseTable = ({
               <FaEdit />
             </IconButton>
           </Tooltip>
-          <Tooltip content="Detail">
-            <IconButton size="sm" className="bg-yellow mx-1">
-              <MdInfo />
-            </IconButton>
-          </Tooltip>
+          <NavLink to={`case-detail/${params.id}`}>
+            <Tooltip content="Detail">
+              <IconButton size="sm" className="bg-yellow mx-1">
+                <MdInfo />
+              </IconButton>
+            </Tooltip>
+          </NavLink>
         </>
       ),
     },

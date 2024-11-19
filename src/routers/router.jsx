@@ -61,6 +61,10 @@ const router = createHashRouter([
         path: "/user-management",
         element: privatePages.userspage,
       },
+      {
+        path: "/case/case-detail/:guid",
+        element: privatePages.detailPage,
+      },
     ],
   },
 ]);

@@ -53,7 +53,7 @@ export default class LoginPage extends Component {
         User.SaveAppToken(res.data.data.appToken);
         User.SaveUserToken(res.data.data.userToken);
         this.setState({ referrer: true });
-        AlertComponent.SuccessResponse(res.data.message);
+        AlertComponent.SuccessResponse("Berhasil Login");
       } else {
         AlertComponent.Error(res.data.message);
       }

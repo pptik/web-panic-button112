@@ -82,7 +82,7 @@ const RegisterPage = () => {
     try {
       const res = await UserService.register(data);
       if (res.data.success) {
-        AlertComponent.SuccessResponse(res.data.message);
+        AlertComponent.SuccessResponse("Berhasil Register");
         setTimeout(() => {
           window.location.reload();
         }, 2000);

@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
 import { MdDelete, MdInfo } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { Link, Navigate, NavLink } from "react-router-dom";
 
 const CaseTable = ({ searchQuery, onEdit }) => {
   const [cases, setCases] = useState([]);
@@ -41,11 +42,13 @@ const CaseTable = ({ searchQuery, onEdit }) => {
               <FaEdit />
             </IconButton>
           </Tooltip>
-          <Tooltip content="Detail">
-            <IconButton size="sm" className="bg-yellow mx-1">
-              <MdInfo />
-            </IconButton>
-          </Tooltip>
+          <NavLink to={`case-detail/${params.id}`}>
+            <Tooltip content="Detail">
+              <IconButton size="sm" className="bg-yellow mx-1">
+                <MdInfo />
+              </IconButton>
+            </Tooltip>
+          </NavLink>
         </>
       ),
     },
@@ -54,7 +57,6 @@ const CaseTable = ({ searchQuery, onEdit }) => {
   const getAllData = async () => {
     try {
       const response = await CaseService.GetCaseDone();
-      console.log(response.data.data);
       if (response.data.status) {
         const fetchedData = response.data.data.map((data, index) => ({
           id: data.guid,

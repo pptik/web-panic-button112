@@ -37,7 +37,8 @@ const API_ENDPOINT = {
   ADD_TRANSACTION: (guid) => `${API_URL}case-trx/${guid}`,
   GET_TRANSACTION: (data) => `${API_URL}case-trx?${data}`,
   CHANGE_STATUS_HANDLING: (guid) => `${API_URL}case-trx/change-status/${guid}`,
-  UPDATE_STATUS_DEVICE: (guid, status) => `${API_URL}devuce/${guid}/${status}`
+  UPDATE_STATUS_DEVICE: (guid, status) => `${API_URL}device/${guid}/${status}`,
+  GET_RESPONSE_TIME: (guidCase) => `${API_URL}response-time-opd/${guidCase}/by-case`,
 };
 
 export default API_ENDPOINT;

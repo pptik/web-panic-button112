@@ -56,7 +56,7 @@ const UserTable = ({ searchQuery, onEdit }) => {
         setUsers(fetchedData); // Simpan data ke state `users`
       } 
     } catch (error) {
-      AlertComponent.Error("Error fetching Users");
+      AlertComponent.Error("Gagal Mengambil Data Pengguna");
     }
   };
 
@@ -76,14 +76,14 @@ const UserTable = ({ searchQuery, onEdit }) => {
         try {
           const response = await UserService.deleteUser(id);
           if (response.data.success) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus Pengguna");
             getAllData(); // Pastikan `getAllData` dipanggil tanpa spasi tambahan
           } else {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
           console.log(error);
-          AlertComponent.Error("Error deleting users", error.message);
+          AlertComponent.Error("Gagal Menghapus Pengguna", error.message);
         } finally {
           setLoading(false);
         }

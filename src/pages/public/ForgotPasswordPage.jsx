@@ -28,7 +28,7 @@ const ForgotPasswordPage = () => {
     try {
       const res = await UserService.forgotPassword(data);
       if (res.data.success) {
-        AlertComponent.SuccessResponse(res.data.message);
+        AlertComponent.SuccessResponse("Berhasil Mengirimkan Email");
         setReferrer(true);
         setTimeout(() => {
           window.location.reload();
