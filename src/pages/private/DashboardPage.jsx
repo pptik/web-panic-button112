@@ -65,7 +65,7 @@ const DashboardPage = () => {
         setDevices(response.data.data);
       }
     } catch (error) {
-      AlertComponent.Error("Error fetching devices");
+      AlertComponent.Error("Error Mengambil Data Perangkat");
     }
   };
 
@@ -76,7 +76,7 @@ const DashboardPage = () => {
         setOpds(response.data.data);
       }
     } catch (error) {
-      AlertComponent.Error("Error fetching OPDs");
+      AlertComponent.Error("Error Mengambil Data OPD");
     }
   };
 
@@ -96,7 +96,7 @@ const DashboardPage = () => {
           setCases(response.data.data);
         }
       } catch (error) {
-        AlertComponent.Error("Error fetching cases");
+        AlertComponent.Error("Error Mengambil Data Kasus");
       }
     } else if (role === "super_admin") {
       try {
@@ -105,7 +105,7 @@ const DashboardPage = () => {
           setCases(response.data.data);
         }
       } catch (error) {
-        AlertComponent.Error("Error fetching cases");
+        AlertComponent.Error("Error Mengambil Data Kasus");
       }
     }
   };
@@ -122,7 +122,6 @@ const DashboardPage = () => {
       socketRef.current.on("connect", () => {});
 
       socketRef.current.on(`case-112#${idCompany}`, (data = IPayloadRMQ) => {
-        // console.log(data);
         
         setCaseData((prevData) => [...prevData, data]); // Append new data
       });
@@ -132,7 +131,6 @@ const DashboardPage = () => {
       socketRef.current.on("connect", () => {});
 
       socketRef.current.on(`case-opd#${idCompany}`, (data = IPayloadRMQ) => {
-        // console.log(data);
         
         setCaseData((prevData) => [...prevData, data]); // Append new data
       });

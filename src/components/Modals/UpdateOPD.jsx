@@ -87,7 +87,6 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       setCenter({ lat: data.latitude, lng: data.longitude });
       setLatitude(data.latitude);
       setLongitude(data.longitude);
@@ -123,7 +122,7 @@ export const UpdateOPD = ({ isOpen, onClose, data, initialCenter }) => {
       const response = await OPDService.UpdateOPD(guid, data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Memperbaharui OPD");
       setInterval(() => {
         window.location.reload();
       }, 2000);

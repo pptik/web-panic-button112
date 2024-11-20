@@ -50,7 +50,7 @@ const EditProfile = ({ isOpen, onClose, data = {} }) => {
       const response = await UserService.updateProfile(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Memperbaharui Profil");
       setInterval(() => {
         window.location.reload();
       }, 2000);

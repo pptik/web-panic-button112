@@ -92,7 +92,7 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
         try {
           const response = await CaseService.DeleteCase(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus Kasus");
             getAllData();
           } else {
             AlertComponent.Error(response.data.message);
@@ -128,8 +128,6 @@ const AnnouncementTable = ({ searchQuery, onEdit }) => {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
-          console.log(error);
-
           AlertComponent.Error(error.response.data.message);
         } finally {
           setLoading(false);

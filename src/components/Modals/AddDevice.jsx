@@ -143,7 +143,7 @@ export const AddDevice = ({ isOpen, onClose, initialCenter }) => {
       const response = await DeviceService.AddDevice(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Menambahkan Perangkat");
       setInterval(() => {
         window.location.reload();
       }, 2000);

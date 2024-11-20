@@ -126,7 +126,7 @@ export const AddOPD = ({ isOpen, onClose, initialCenter }) => {
       const response = await OPDService.AddOPD(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Menambahkan OPD");
       setInterval(() => {
         window.location.reload();
       }, 2000);
