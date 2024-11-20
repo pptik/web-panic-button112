@@ -54,7 +54,7 @@ const ReportToOpd = ({ isOpen, onClose, data }) => {
       setIsLoading(false);
       setSelectedOpds([]); // Reset selectedOpds after saving
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Memberitahu OPD");
       setInterval(() => {
         window.location.reload();
       }, 2000);

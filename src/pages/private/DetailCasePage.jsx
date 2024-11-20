@@ -4,13 +4,17 @@ import { useParams } from "react-router-dom";
 import CaseService from "../../services/service/CaseService";
 import ResponseService from "../../services/service/ResponseService";
 import AlertComponent from "../../components/AlertComponent";
+import ResponseTable from "../../components/Tables/ResponseTimeTable";
+import { RPTDetail } from "../../components/Modals/RPTDetail";
 
 export const DetailCasePage = () => {
   const { guid } = useParams();
 
+  const [selected, setSelected] = useState(null);
   const [caseDetail, setCaseDetail] = useState(null);
   const [rpts, setRpts] = useState([]);
-  const [loading, setLoading] = useState(true); // Menambahkan state untuk loading
+  const [loading, setLoading] = useState(true);
+  const [show, setShow] = useState(false);
 
   const getCaseDetail = async () => {
     try {
@@ -19,12 +23,11 @@ export const DetailCasePage = () => {
         setCaseDetail(response.data.data);
       } else {
         AlertComponent.Error(
-          response.data.message || "Failed to fetch case details"
+          response.data.message || "Gagal Mengambil Data"
         );
       }
     } catch (error) {
-      console.error("Error fetching case detail:", error);
-      AlertComponent.Error("Error fetching case details");
+      AlertComponent.Error("Error Mengambil Data Detail Kasus");
     } finally {
       setLoading(false);
     }
@@ -37,13 +40,17 @@ export const DetailCasePage = () => {
         setRpts(response.data.data);
       } else {
         AlertComponent.Error(
-          response.data.message || "Failed to fetch response time data"
+          response.data.message || "Gagal Mengambil Data"
         );
       }
     } catch (error) {
-      console.error("Error fetching response time:", error);
-      AlertComponent.Error("Error fetching response time");
+      AlertComponent.Error("Error Mengambil Data Penanganan");
     }
+  };
+
+  const handleOpen = (datas) => {
+    setSelected(datas);
+    setShow(true);
   };
 
   useEffect(() => {
@@ -131,18 +138,23 @@ export const DetailCasePage = () => {
             <p>No case details available.</p>
           )}
 
-          {/* {rpts.length > 0 ? (
+          {rpts.length > 0 ? (
             <ul className="mt-4">
-              <h2 className="font-bold">Response Times:</h2>
-              {rpts.map((rpt, index) => (
-                <li key={index}>{rpt}</li>
-              ))}
+              <h2 className="font-bold">Detail Penanganan</h2>
+              <ResponseTable datas={rpts} onDetail={(datas) => handleOpen(datas)} />
             </ul>
           ) : (
             <p className="mt-4">No response time data available.</p>
-          )} */}
+          )}
         </div>
       </div>
+      {show && (
+        <RPTDetail
+          isOpen={show}
+          onClose={() => setShow(false)}
+          data={selected}
+        />
+      )}
     </Layout>
   );
 };

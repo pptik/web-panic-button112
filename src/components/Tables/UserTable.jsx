@@ -82,7 +82,6 @@ const UserTable = ({ searchQuery, onEdit }) => {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
-          console.log(error);
           AlertComponent.Error("Gagal Menghapus Pengguna", error.message);
         } finally {
           setLoading(false);

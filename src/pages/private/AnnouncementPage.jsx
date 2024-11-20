@@ -21,7 +21,6 @@ export default class AnnouncementPage extends Component {
   }
 
   handleOpen(data) {
-    console.log(data);
     this.setState({ show: !this.state.show, selected: data });
   }
 

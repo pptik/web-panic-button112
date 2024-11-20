@@ -97,7 +97,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
         try {
           const response = await DeviceService.DeleteDevice(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus Perangkat");
             getAllDevice();
           } else {
             AlertComponent.Error(response.data.message);
@@ -121,7 +121,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
         showCancelButton: true,
         confirmButtonColor: "#FFD245",
         cancelButtonColor: "#FF4545",
-        confirmButtonText: "Hapus",
+        confirmButtonText: "Aktifkan",
         cancelButtonText: "Batal",
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -132,7 +132,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
               status
             );
             if (response.data.status) {
-              AlertComponent.SuccessResponse(response.data.message);
+              AlertComponent.SuccessResponse("Berhasil Mengubah Status Perangkat");
               getAllDevice();
             } else {
               AlertComponent.Error(response.data.message);
@@ -153,7 +153,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
         showCancelButton: true,
         confirmButtonColor: "#FFD245",
         cancelButtonColor: "#FF4545",
-        confirmButtonText: "Hapus",
+        confirmButtonText: "Aktifkan",
         cancelButtonText: "Batal",
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -164,7 +164,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
               status
             );
             if (response.data.status) {
-              AlertComponent.SuccessResponse(response.data.message);
+              AlertComponent.SuccessResponse("Berhasil Mengubah Status Perangkat");
               getAllDevice();
             } else {
               AlertComponent.Error(response.data.message);
@@ -184,12 +184,12 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
       let status = 1;
       Swal.fire({
         title: "Apakah anda yakin?",
-        text: "Ingin menyalakan device?",
+        text: "Ingin mematikan device?",
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#FFD245",
         cancelButtonColor: "#FF4545",
-        confirmButtonText: "Hapus",
+        confirmButtonText: "Matikan",
         cancelButtonText: "Batal",
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -200,7 +200,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
               status
             );
             if (response.data.status) {
-              AlertComponent.SuccessResponse(response.data.message);
+              AlertComponent.SuccessResponse("Berhasil Mengubah Status Perangkat");
               getAllDevice();
             } else {
               AlertComponent.Error(response.data.message);
@@ -216,12 +216,12 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
       let status = 0;
       Swal.fire({
         title: "Apakah anda yakin?",
-        text: "Ingin menyalakan device?",
+        text: "Ingin mematikan device?",
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#FFD245",
         cancelButtonColor: "#FF4545",
-        confirmButtonText: "Hapus",
+        confirmButtonText: "Matikan",
         cancelButtonText: "Batal",
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -232,7 +232,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
               status
             );
             if (response.data.status) {
-              AlertComponent.SuccessResponse(response.data.message);
+              AlertComponent.SuccessResponse("Berhasil Mengubah Status Perangkat");
               getAllDevice();
             } else {
               AlertComponent.Error(response.data.message);

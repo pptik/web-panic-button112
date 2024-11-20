@@ -39,10 +39,8 @@ const ChangePhoto = ({ isOpen, onClose }) => {
       formData.append("file", blob);
 
       const responseUpload = await UserService.UploadImage(formData);
-      console.log(responseUpload);
-
       if (responseUpload.data.success) {
-        AlertComponent.SuccessResponse(responseUpload.data.message);
+        AlertComponent.SuccessResponse("Berhasil Mengubah Photo");
         handleClose();
         setTimeout(() => {
           window.location.reload();

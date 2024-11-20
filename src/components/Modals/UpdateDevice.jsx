@@ -86,7 +86,6 @@ export const UpdateDevice = ({ isOpen, onClose, data, initialCenter }) => {
   }, [initialCenter]);
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       setCenter({ lat: data.latitude, lng: data.longitude });
       setLatitude(data.latitude);
@@ -122,7 +121,7 @@ export const UpdateDevice = ({ isOpen, onClose, data, initialCenter }) => {
       const response = await DeviceService.UpdateDevice(guid, data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Memperbaharui Perangkat");
       setInterval(() => {
         window.location.reload();
       }, 2000);

@@ -59,7 +59,7 @@ const ChangePassword = ({ isOpen, onClose, data }) => {
       const response = await UserService.updatePassword(data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Mengubah Password");
       setInterval(() => {
         window.location.reload();
       }, 2000);

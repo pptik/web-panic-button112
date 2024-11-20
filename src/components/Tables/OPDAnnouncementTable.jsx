@@ -95,7 +95,7 @@ const OPDAnnouncementTable = ({
         try {
           const response = await CaseService.DeleteCase(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus Kasus");
             getAllData();
           } else {
             AlertComponent.Error(response.data.message);
@@ -124,7 +124,7 @@ const OPDAnnouncementTable = ({
         try {
           const response = await TransactionService.ChangeStatusHandling(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Mengubah Status Kasus");
             onStatusChange("Dalam Penanganan");
             setInterval(() => {
               window.location.reload();
@@ -191,14 +191,12 @@ const OPDAnnouncementTable = ({
         try {
           const response = await CaseService.TurnOffCase(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Dimatikan");
             getAllData();
           } else {
             AlertComponent.Error(response.data.message);
           }
         } catch (error) {
-          console.log(error);
-
           AlertComponent.Error(error.response.data.message);
         } finally {
           setLoading(false);

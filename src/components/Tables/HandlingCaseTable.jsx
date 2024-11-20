@@ -80,7 +80,7 @@ const HandlingCaseTable = ({
         try {
           const response = await CaseService.DeleteCase(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus Kasus");
             getAllData();
           } else {
             AlertComponent.Error(response.data.message);

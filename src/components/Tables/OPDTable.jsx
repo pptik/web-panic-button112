@@ -73,7 +73,7 @@ const OPDTable = ({ searchQuery, onEdit }) => {
         try {
           const response = await OPDService.DeleteOPD(id);
           if (response.data.status) {
-            AlertComponent.SuccessResponse(response.data.message);
+            AlertComponent.SuccessResponse("Berhasil Menghapus OPD");
             getAllData();
           } else {
             AlertComponent.Error(response.data.message);

@@ -35,7 +35,7 @@ export const UpdateCase = ({ isOpen, onClose, data }) => {
       const response = await CaseService.UpdateCase(guid, data);
       setIsLoading(false);
       onClose();
-      AlertComponent.SuccessResponse(response.data.message);
+      AlertComponent.SuccessResponse("Berhasil Memperbaharui Kasus");
       setInterval(() => {
         window.location.reload();
       }, 2000);
