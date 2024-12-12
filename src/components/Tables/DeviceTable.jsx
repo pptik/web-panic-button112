@@ -72,7 +72,7 @@ const DeviceTable = ({ searchQuery, onEdit }) => {
           no: index + 1,
           name: data.name,
           type: data.type,
-          guid: data.guid,
+          guid: data.guidDevice,
         }));
         setDevices(fetchedData);
       }
