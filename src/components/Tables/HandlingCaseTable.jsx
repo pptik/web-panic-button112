@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
-import { FiSend } from "react-icons/fi";
 import { MdDelete, MdInfo } from "react-icons/md";
 import TransactionService from "../../services/service/TransactionService";
 import { GetGuidCompany } from "../../helpers/AuthHeaders";
