@@ -4,7 +4,7 @@ import { IconButton, Spinner, Tooltip } from "@material-tailwind/react";
 import AlertComponent from "../AlertComponent";
 import Swal from "sweetalert2";
 import CaseService from "../../services/service/CaseService";
-import { FaPowerOff } from "react-icons/fa";
+import { FaEdit, FaPowerOff } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import TransactionService from "../../services/service/TransactionService";
